@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quién Soy - Zakerii</title>
+  <link rel="icon" type="image/png" href="Imaganes/LOGO.png">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="Estilos.css">
+
+  <script src="sound.js" defer></script>
+  <script src="viewer3d.js" defer></script>
+  <script src="index.js" defer></script>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- ===== LOGO ===== -->
+    <div class="LOGO">
+      <a href="home.html">
+        <img src="Imaganes/LOGO.png" alt="Zakerii Logo" class="logo-image"
+          onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\' viewBox=\'0 0 80 80\'><circle cx=\'40\' cy=\'40\' r=\'36\' fill=\'%230d0f17\' stroke=\'%2300f0ff\' stroke-width=\'3\'/><text x=\'40\' y=\'48\' font-family=\'sans-serif\' font-size=\'22\' font-weight=\'bold\' fill=\'%2300f0ff\' text-anchor=\'middle\'>Z</text></svg>';">
+      </a>
+      <div class="logo-text">
+        <p class="portfolio-title">PORFOLIO DE</p>
+        <p class="name"></p>
+      </div>
+    </div>
+
+    <!-- ===== NAVEGACION ===== -->
+    <div class="ICONS">
+      <nav class="NAVEGACION">
+        <ul>
+          <li>
+            <a title="HOME" href="home.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-home">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a title="PORTAFOLIO" href="trabajos.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-folder-closed">
+                <path
+                  d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
+                <path d="M2 10h20" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a title="CONTACTO" href="contacto.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-phone">
+                <path
+                  d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a title="QUIEN SOY" href="about.html" class="active">
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-circle-user">
+                <circle cx="12" cy="12" r="10" />
+                <circle cx="12" cy="10" r="3" />
+                <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- ===== SETTINGS ===== -->
+    <div class="SETTIGNS">
+      <input id="lightmode-toggle" type="checkbox">
+      <label class="toggle" for="lightmode-toggle"></label>
+    </div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="MAIN">
+      <h1 class="page-title"
+        style="text-align: center; color: var(--primary); font-size: 26px; font-weight: 800; margin-bottom: 8px;">SOBRE
+        MÍ</h1>
+      <p class="page-subtitle"
+        style="text-align: center; color: var(--text-muted); font-size: 14px; margin-bottom: 30px;">Estudiante de
+        Animación 2D y 3D, Entornos Interactivos y Creador de Contenido</p>
+
+      <div class="about-grid">
+        <!-- Sidebar Profile Card -->
+        <div class="about-card" style="text-align: center;">
+          <img src="Imaganes/Fto de perfil.jpg" alt="Zakhar Oleksenko" class="about-avatar ImagenTrabajo"
+            data-nombre="Foto de Perfil — Zakhar Oleksenko" title="Clic para ampliar en pantalla completa">
+          <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 5px;">Zakhar Oleksenko Shapoval</h2>
+          <p style="color: var(--primary); font-size: 13px; font-weight: 600; margin-bottom: 15px;">Alias: ZAKERII</p>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px;">
+            Nacido en 2006. Apasionado por el modelado 3D, el texturizado, la edición de vídeo y el desarrollo de
+            videojuegos.
+          </p>
+          <a href="contacto.html" class="btn-submit"
+            style="display: block; text-decoration: none; text-align: center;">Contactar Ahora</a>
+        </div>
+
+        <!-- Main Interactive Tabs Content -->
+        <div class="about-card">
+          <div class="about-tabs">
+            <button class="about-tab-btn active" data-tab="personal">PERSONAL</button>
+            <button class="about-tab-btn" data-tab="laboral">LABORAL</button>
+            <button class="about-tab-btn" data-tab="academico">ACADÉMICO</button>
+            <button class="about-tab-btn" data-tab="hobbies">HOBBIES</button>
+          </div>
+
+          <div id="tab-personal" class="about-content tab-pane">
+            <ul class="about-list info-personal">
+              <li>
+                <span class="about-icon">👤</span>
+                <span>Me llamo Zakhar Oleksenko Shapoval.</span>
+              </li>
+              <li>
+                <span class="about-icon">🎂</span>
+                <span>Nacido el 14 de diciembre de 2006.</span>
+              </li>
+              <li>
+                <span class="about-icon">🇪🇸</span>
+                <span>He vivido toda la vida en España.</span>
+              </li>
+              <li>
+                <span class="about-icon">🗣️</span>
+                <span>Mi lengua materna es Ruso Y Español.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div id="tab-laboral" class="about-content tab-pane" style="display: none;">
+            <ul class="about-list info-laboral">
+              <li>
+                <span class="about-icon">🎬</span>
+                <span>En el ámbito laboral cuento con amplia experiencia en edición de vídeos para diferentes nichos como historia, vlogs, boxeo,historia y etc.</span>
+              </li>
+              <li>
+                <span class="about-icon">💻</span>
+                <span>Edito desde los 12 años, empezando con Kinemaster en móvil y terminando en DaVinci Resolve en PC.</span>
+              </li>
+              <li>
+                <span class="about-icon">🚀</span>
+                <span>Además estoy cursando Formación Profesional en Animaciones 3D, Entornos Interactivos y Videojuegos.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div id="tab-academico" class="about-content tab-pane" style="display: none;">
+            <ul class="about-list info-academico">
+              <li>
+                <span class="about-icon">🏫</span>
+                <span>Primaria CEIP Romualdo Ballester</span>
+              </li>
+              <li>
+                <span class="about-icon">🎓</span>
+                <span>IES Torrevigía</span>
+              </li>
+              <li>
+                <span class="about-icon">📜</span>
+                <span>Bachillerato de Ciencias Sociales y General</span>
+              </li>
+              <li>
+                <span class="about-icon">🎨</span>
+                <span>Formación Profesional en Animaciones 2D y 3D, Entornos Interactivos y Videojuegos (Bigastro,Paco Ruiz.</span>
+              </li>
+              <li>
+                <span class="about-icon">🇬🇧</span>
+                <span>Poseo nivel B1 de Valenciano y quiero sacar un B2 de Ingles.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div id="tab-hobbies" class="about-content tab-pane" style="display: none;">
+            <ul class="about-list info-hobies">
+              <li>
+                <span class="about-icon">🎮</span>
+                <span>Desde los 12 años me apasione a la edición de vídeo.</span>
+              </li>
+              <li>
+                <span class="about-icon">💻</span>
+                <span>Comencé en el móvil con Kinemaster, pasé a CapCut en portátil y posteriormente a DaVinci Resolve y Blender en PC.</span>
+              </li>
+              <li>
+                <span class="about-icon">🌍</span>
+                <span>Además tengo canales de en YouTube y Twitch @ZakeriiGames y Zakerii_ y mi meta es viajar por el mundo y vivir de mis proyectos creativos.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== LINKS ===== -->
+    <div class="LINKS">
+      <h4>ÍNDICE</h4>
+      <nav>
+        <ul class="webs">
+          <li><a href="home.html">HOME</a></li>
+          <li><a href="trabajos.html">PORTAFOLIO</a></li>
+          <li><a href="contacto.html">CONTACTO</a></li>
+          <li><a href="about.html">QUIÉN SOY</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- ===== SUSCRIBE ===== -->
+    <div class="SUSCRIBE">
+      <form action="#" method="post" class="subscribe-form"
+        onsubmit="event.preventDefault(); alert('¡Gracias por suscribirte!');">
+        <h4>SUSCRÍBETE</h4>
+        <label for="correo">CORREO:</label>
+        <input class="correo" type="email" id="correo" name="correo" placeholder="tu@email.com" required>
+        <input type="submit" value="Noticias" class="enviarboton">
+      </form>
+    </div>
+
+    <!-- ===== SOCIAL ===== -->
+    <div class="SOCIAL">
+      <div class="Redes">
+        <nav class="redes">
+          <span class="sigueme">SÍGUEME</span>
+          <ul>
+            <li>
+              <a title="YOUTUBE" href="https://www.youtube.com/ZakeriiGames" target="_blank" rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a title="INSTAGRAM" href="https://www.instagram.com/Zakerii_/" target="_blank" rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a title="X" href="https://x.com/Zakerii3" target="_blank" rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <path d="M4 4l11.733 16h4.267l-11.733 -16l-4.267 0" />
+                  <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a title="ARTSTATION" href="https://www.artstation.com" target="_blank" rel="noopener">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M0 17.723l2.027 3.505h.001a2.424 2.424 0 0 0 2.164 1.333h13.457l-2.792-4.838H0zm24 .025c0-.484-.143-.935-.388-1.314L15.728 2.728a2.424 2.424 0 0 0-2.142-1.289H9.419L21.598 22.54l1.92-3.325c.378-.637.482-.919.482-1.467zm-11.129-3.462L7.428 4.858l-5.444 9.428h10.887z" />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a title="GITHUB" href="https://github.com/zakerii" target="_blank" rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+                </svg>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <div class="FOOTER">
+      <h4>© 2026 Zakhar Oleksenko Shapoval. Todos los derechos reservados.</h4>
+      <p>Diseñado por Zakhar Oleksenko Shapoval</p>
+      <p class="email"><a href="mailto:contacto@zakerii.com">contacto@zakerii.com</a></p>
+    </div>
+
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabBtns = document.querySelectorAll('.about-tab-btn');
+      const tabPanes = document.querySelectorAll('.tab-pane');
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const tab = btn.dataset.tab;
+          tabPanes.forEach(pane => {
+            if (pane.id === `tab-${tab}`) {
+              pane.style.display = 'block';
+            } else {
+              pane.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

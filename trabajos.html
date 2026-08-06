@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portafolio - Zakerii</title>
+  <link rel="icon" type="image/png" href="Imaganes/LOGO.png">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="Estilos.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="sound.js" defer></script>
+  <script src="viewer3d.js" defer></script>
+  <script src="carousel.js" defer></script>
+  <script src="index.js" defer></script>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- ===== LOGO ===== -->
+    <div class="LOGO">
+      <a href="home.html">
+        <img src="Imaganes/LOGO.png" alt="Zakerii Logo" class="logo-image"
+          onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\' viewBox=\'0 0 80 80\'><circle cx=\'40\' cy=\'40\' r=\'36\' fill=\'%230d0f17\' stroke=\'%2300f0ff\' stroke-width=\'3\'/><text x=\'40\' y=\'48\' font-family=\'sans-serif\' font-size=\'22\' font-weight=\'bold\' fill=\'%2300f0ff\' text-anchor=\'middle\'>Z</text></svg>';">
+      </a>
+      <div class="logo-text">
+        <p class="portfolio-title">PORFOLIO DE</p>
+        <p class="name"></p>
+      </div>
+    </div>
+
+    <!-- ===== NAVEGACION ===== -->
+    <div class="ICONS">
+      <nav class="NAVEGACION">
+        <ul>
+          <li>
+            <a title="HOME" href="home.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-home">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a title="PORTAFOLIO" href="trabajos.html" class="active">
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-folder-closed">
+                <path
+                  d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
+                <path d="M2 10h20" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a title="CONTACTO" href="contacto.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-phone">
+                <path
+                  d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a title="QUIEN SOY" href="about.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-circle-user">
+                <circle cx="12" cy="12" r="10" />
+                <circle cx="12" cy="10" r="3" />
+                <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- ===== SETTINGS ===== -->
+    <div class="SETTIGNS">
+      <input id="lightmode-toggle" type="checkbox">
+      <label class="toggle" for="lightmode-toggle"></label>
+    </div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="MAIN">
+      <h1 class="page-title"
+        style="text-align: center; color: var(--primary); font-size: 26px; font-weight: 800; margin-bottom: 8px;">
+        PORTAFOLIO DE TRABAJOS</h1>
+      <p class="page-subtitle"
+        style="text-align: center; color: var(--text-muted); font-size: 14px; margin-bottom: 30px;">Explora mis
+        proyectos 3D, texturizado, animación y edición de vídeo con visor interactivo</p>
+
+
+      <!-- Search Bar (Buscador) -->
+      <div class="search-container" style="max-width: 500px; margin: 0 auto 25px auto; position: relative;">
+        <input type="text" id="portfolioSearch" class="form-control"
+          placeholder="🔍 Buscar por título, tag o categoría..."
+          style="width: 100%; padding: 12px 18px 12px 42px; border-radius: 25px; background: rgba(13, 15, 23, 0.85); border: 1px solid var(--border, rgba(0, 240, 255, 0.3)); color: #fff; font-size: 14px; outline: none; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+        <svg
+          style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; fill: var(--primary, #00f0ff); opacity: 0.8;"
+          viewBox="0 0 24 24">
+          <path
+            d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+        </svg>
+      </div>
+
+      <!-- Category Filter Buttons -->
+      <div class="portfolio-filters"
+        style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 30px;">
+        <button class="filter-btn active" data-filter="all">TODOS</button>
+        <button class="filter-btn" data-filter="3d">MODELADO 3D</button>
+        <button class="filter-btn" data-filter="visor3d">VISOR 3D</button>
+        <button class="filter-btn" data-filter="textura">TEXTURIZADO</button>
+        <button class="filter-btn" data-filter="anim">ANIMACIÓN 2D/3D</button>
+        <button class="filter-btn" data-filter="dibujo">DIBUJO</button>
+        <button class="filter-btn" data-filter="edicion">EDICIÓN VIDEO</button>
+        <button class="filter-btn" data-filter="video">VIDEOS</button>
+      </div>
+
+      <!-- Works Cards Grid -->
+      <div class="portfolio-grid" id="portfolioGrid">
+
+        <!-- Tarjeta Interactiva para Cargar Modelo 3D propio -->
+        <div class="work-card work-card-upload" data-category="3d visor3d" id="upload3DCard"
+          style="border: 2px dashed var(--primary, #00f0ff); background: rgba(0, 240, 255, 0.04); cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 30px 20px;">
+          <div class="upload-icon-wrapper"
+            style="width: 65px; height: 65px; border-radius: 50%; background: rgba(0, 240, 255, 0.12); border: 1px solid rgba(0, 240, 255, 0.4); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; color: var(--primary, #00f0ff); box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+          </div>
+          <span class="work-card-category"
+            style="color: var(--primary, #00f0ff); font-weight: 700; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;">Visor
+            3D Interactivo</span>
+          <h3 class="work-card-title" style="margin: 8px 0; font-size: 20px; color: #fff;">Cargar Tu Modelo 3D</h3>
+          <p class="work-card-desc"
+            style="font-size: 13px; color: var(--text-muted, rgba(255,255,255,0.7)); max-width: 260px; margin: 0 auto 16px auto; line-height: 1.4;">
+            Haz clic o arrastra aquí tu archivo 3D (<strong>.glb, .gltf, .obj, .stl</strong>) para verlo en el Visor 3D.
+          </p>
+          <label class="filter-btn active" for="main3dFileInput"
+            style="cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; padding: 10px 20px; border-radius: 20px; margin-bottom: 12px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+            Seleccionar Archivo
+          </label>
+          <input type="file" id="main3dFileInput" accept=".glb,.gltf,.obj,.stl" style="display: none;">
+          <div class="work-card-tags" style="display: flex; gap: 6px; justify-content: center; flex-wrap: wrap;">
+            <span class="tag">.GLB</span>
+            <span class="tag">.GLTF</span>
+            <span class="tag">.OBJ</span>
+            <span class="tag">.STL</span>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="3d">
+          <img class="work-card-img" src="Imaganes/Escenario.png" alt="RHabitacion Render">
+          <div class="work-card-body">
+            <span class="work-card-category">Modelado & Texturas</span>
+            <h3 class="work-card-title">Render Escenario Blender</h3>
+            <p class="work-card-desc">Composición 3D.</p>
+            <div class="work-card-tags">
+              <span class="tag">Blender</span>
+              <span class="tag">Cycles</span>
+              <span class="tag">Lighting</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="3d">
+          <img class="work-card-img" src="Imaganes/taza.jpg" alt="Taza Render">
+          <div class="work-card-body">
+            <span class="work-card-category">Modelado & Texturas</span>
+            <h3 class="work-card-title">Render Taza</h3>
+            <p class="work-card-desc">Modelado 3D .</p>
+            <div class="work-card-tags">
+              <span class="tag">Blender</span>
+              <span class="tag">Modelado</span>
+              <span class="tag">Texturas</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="textura 3d">
+          <img class="work-card-img" src="Imaganes/ZAKHAR_O.S_PROCEDURALES_0.png" alt="Materiales Procedurales">
+          <div class="work-card-body">
+            <span class="work-card-category">Substance & Shaders</span>
+            <h3 class="work-card-title">Texturas Procedurales Advanced</h3>
+            <p class="work-card-desc">Creación de shaders procedurales complejos en Substance 3D Painter con desgastes
+              metálicos y pátinas de óxido.</p>
+            <div class="work-card-tags">
+              <span class="tag">Substance Painter</span>
+              <span class="tag">PBR</span>
+              <span class="tag">Shader</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="textura 3d">
+          <img class="work-card-img" src="Imaganes/Renderfuego.jpg" alt="Exintor Substance">
+          <div class="work-card-body">
+            <span class="work-card-category">Textura & Procedural</span>
+            <h3 class="work-card-title">Render Extintor 3D </h3>
+            <p class="work-card-desc">Texturizado realista con Substance 3D Painter.</p>
+            <div class="work-card-tags">
+              <span class="tag">Substance 3D Painter</span>
+              <span class="tag">Procedural</span>
+              <span class="tag">Cycles</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="textura 3d">
+          <img class="work-card-img" src="Imaganes/Calca mexicana.jpg" alt="Calca mexicana">
+          <div class="work-card-body">
+            <span class="work-card-category">Textura & Procedural</span>
+            <h3 class="work-card-title">Texturizado Calaca mexicana </h3>
+            <p class="work-card-desc">Texturizado realista con Blender.</p>
+            <div class="work-card-tags">
+              <span class="tag">Blender</span>
+              <span class="tag">Paint</span>
+              <span class="tag">Cycles</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="textura 3d">
+          <img class="work-card-img" src="Imaganes/RendersTaladro.jpg" alt="Taladro 3d">
+          <div class="work-card-body">
+            <span class="work-card-category">Textura & Procedural</span>
+            <h3 class="work-card-title">Render Taladro 3D </h3>
+            <p class="work-card-desc">Texturizado realista con Substance 3D Painter.</p>
+            <div class="work-card-tags">
+              <span class="tag">Substance 3D Painter</span>
+              <span class="tag">Procedural</span>
+              <span class="tag">Cycles</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="textura 3d">
+          <img class="work-card-img" src="Imaganes/Espada.jpg" alt="Espada 3d">
+          <div class="work-card-body">
+            <span class="work-card-category">Textura & Procedural</span>
+            <h3 class="work-card-title">Render Espada 3D </h3>
+            <p class="work-card-desc">Texturizado realista con Blender.</p>
+            <div class="work-card-tags">
+              <span class="tag">Blender</span>
+              <span class="tag">Cycles</span>
+              <span class="tag">Texturas</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="textura 3d">
+          <img class="work-card-img" src="Imaganes/Incubadora.png" alt="Incubadora 3d">
+          <div class="work-card-body">
+            <span class="work-card-category">Textura & Procedural</span>
+            <h3 class="work-card-title">Render Incubadora 3D </h3>
+            <p class="work-card-desc">Texturizado realista con Blender.</p>
+            <div class="work-card-tags">
+              <span class="tag">Blender</span>
+              <span class="tag">Cycles</span>
+              <span class="tag">Texturas</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="textura 3d">
+          <img class="work-card-img" src="Imaganes/Hacha.jpg" alt="Hacha 3d">
+          <div class="work-card-body">
+            <span class="work-card-category">Textura & Procedural</span>
+            <h3 class="work-card-title">Render Hacha 3D </h3>
+            <p class="work-card-desc">Texturizado realista con Blender.</p>
+            <div class="work-card-tags">
+              <span class="tag">Blender</span>
+              <span class="tag">Cycles</span>
+              <span class="tag">Texturas</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="textura 3d">
+          <img class="work-card-img" src="Imaganes/Huevo.png" alt="Huevo 3d">
+          <div class="work-card-body">
+            <span class="work-card-category">Textura & Procedural</span>
+            <h3 class="work-card-title">Render Huevo 3D </h3>
+            <p class="work-card-desc">Texturizado realista con Blender.</p>
+            <div class="work-card-tags">
+              <span class="tag">Blender</span>
+              <span class="tag">Cycles</span>
+              <span class="tag">Texturas</span>
+              <span class="tag">Substance Painter</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="textura 3d">
+          <img class="work-card-img" src="Imaganes/UV BARIL MAGIC.png" alt="Baril Magic 3d">
+          <div class="work-card-body">
+            <span class="work-card-category">Textura & Procedural</span>
+            <h3 class="work-card-title">Render Baril Magic 3D </h3>
+            <p class="work-card-desc">Texturizado realista con Blender.</p>
+            <div class="work-card-tags">
+              <span class="tag">Blender</span>
+              <span class="tag">Cycles</span>
+              <span class="tag">Texturas</span>
+              <span class="tag">UV</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="textura 3d">
+          <img class="work-card-img" src="Imaganes/UV BARIL OFF MAGIC.png" alt="Baril Off Magic 3d">
+          <div class="work-card-body">
+            <span class="work-card-category">Textura & Procedural</span>
+            <h3 class="work-card-title">Render Baril Off Magic 3D </h3>
+            <p class="work-card-desc">Texturizado realista con Blender.</p>
+            <div class="work-card-tags">
+              <span class="tag">Blender</span>
+              <span class="tag">Cycles</span>
+              <span class="tag">Texturas</span>
+              <span class="tag">UV</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="3d textura">
+          <img class="work-card-img" src="Imaganes/Con HDRI.jpg" alt="Hielo procedural">
+          <div class="work-card-body">
+            <span class="work-card-category">Materiales procedurales</span>
+            <h3 class="work-card-title">Hielo procedural</h3>
+            <p class="work-card-desc">Material de hielo procedural con físicas de refracción y reflexión.</p>
+            <div class="work-card-tags">
+              <span class="tag">Blender</span>
+              <span class="tag">Materiales</span>
+              <span class="tag">Procedural</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="dibujo">
+          <img class="work-card-img" src="Imaganes/CHARACTER NEW.png" alt="CHARACTER NEW">
+          <div class="work-card-body">
+            <span class="work-card-category">Concept Art 2D</span>
+            <h3 class="work-card-title">CHARACTER NEW</h3>
+            <p class="work-card-desc">Diseño de personajes 2D.</p>
+            <div class="work-card-tags">
+              <span class="tag">2D Concept</span>
+              <span class="tag">Character Design</span>
+              <span class="tag">Photoshop</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="dibujo">
+          <img class="work-card-img" src="Imaganes/HOJA DE GIRO.png" alt="Hoja de Giro Concept">
+          <div class="work-card-body">
+            <span class="work-card-category">Concept Art 2D</span>
+            <h3 class="work-card-title">Hoja de Giro & Turnaround</h3>
+            <p class="work-card-desc">Diseño de personajes 2D con turnaround completo de 360°, expresiones faciales y
+              guía de color para animación.</p>
+            <div class="work-card-tags">
+              <span class="tag">2D Concept</span>
+              <span class="tag">Character Design</span>
+              <span class="tag">Photoshop</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="dibujo">
+          <img class="work-card-img" src="Imaganes/HOJA DE EMOCIONES.png" alt="Hoja de Emociones">
+          <div class="work-card-body">
+            <span class="work-card-category">Concept Art 2D</span>
+            <h3 class="work-card-title">Hoja de Emociones</h3>
+            <p class="work-card-desc">Ilustración de expresiones faciales y emociones para personajes de animación.
+            </p>
+            <div class="work-card-tags">
+              <span class="tag">2D Concept</span>
+              <span class="tag">Character Design</span>
+              <span class="tag">Photoshop</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="dibujo">
+          <img class="work-card-img" src="Imaganes/PR2.1.Zakhar_Oleksenko.jpg" alt="Collage">
+          <div class="work-card-body">
+            <span class="work-card-category">Collage</span>
+            <h3 class="work-card-title">Ilustración</h3>
+            <p class="work-card-desc">Ilustración de un collage.
+            </p>
+            <div class="work-card-tags">
+              <span class="tag">Collage</span>
+              <span class="tag">Concept Art</span>
+              <span class="tag">Photoshop</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="dibujo">
+          <img class="work-card-img" src="Imaganes/CON PC.png" alt="Habitacion dibujo">
+          <div class="work-card-body">
+            <span class="work-card-category">Dibujo Digital</span>
+            <h3 class="work-card-title">Habitación de Dibujo </h3>
+            <p class="work-card-desc"> Dibujo digital de una habitación con un personaje.</p>
+            <div class="work-card-tags">
+              <span class="tag">Photoshop</span>
+              <span class="tag">Pintura Digital</span>
+              <span class="tag">Sketch</span>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="work-card" data-category="3d visor3d" data-glb="Imaganes/PolacPared.glb"
+          data-nombre="Patio / Paredes 3D">
+          <img class="work-card-img" src="Imaganes/Patio3.png" alt="Patio / Pared Polac 3D">
+          <div class="work-card-body">
+            <span class="work-card-category">Modelado 3D Interactivo</span>
+            <h3 class="work-card-title">Patio / Paredes 3D</h3>
+            <p class="work-card-desc">Haz clic para abrir el modelo 3D interactivo en pantalla completa.</p>
+            <div class="work-card-tags">
+              <span class="tag">High Poly</span>
+              <span class="tag">Modelo 3D</span>
+              <span class="tag">GLB</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="3d visor3d" data-glb="Imaganes/vino.glb" data-nombre="Botella de Vino 3D">
+          <img class="work-card-img" src="Imaganes/vino.png" alt="Botella de Vino 3D">
+          <div class="work-card-body">
+            <span class="work-card-category">Modelado 3D Interactivo</span>
+            <h3 class="work-card-title">Botella de Vino 3D</h3>
+            <p class="work-card-desc">Haz clic para abrir el modelo 3D interactivo en pantalla completa.</p>
+            <div class="work-card-tags">
+              <span class="tag">High Poly</span>
+              <span class="tag">Modelo 3D</span>
+              <span class="tag">GLB</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="edicion">
+          <img class="work-card-img" src="Imaganes/Mon1.png" alt="Proceso de edicion">
+          <div class="work-card-body">
+            <span class="work-card-category">Edicion Digital</span>
+            <h3 class="work-card-title">Proceso de edicion</h3>
+            <p class="work-card-desc"> Video editado con davinci resolve.</p>
+            <div class="work-card-tags">
+              <span class="tag">Davinci Resolve</span>
+              <span class="tag">Minecraft</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="edicion">
+          <img class="work-card-img" src="Imaganes/Monataje2.jpg" alt="Proceso de edicion">
+          <div class="work-card-body">
+            <span class="work-card-category">Edicion Digital</span>
+            <h3 class="work-card-title">Proceso de edicion</h3>
+            <p class="work-card-desc"> Video editado con davinci resolve.</p>
+            <div class="work-card-tags">
+              <span class="tag">Davinci Resolve</span>
+              <span class="tag">Minecraft</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="video anim">
+          <video class="work-card-img" src="Imaganes/ROTOSCOPIA CON FONDO.mp4" autoplay loop muted playsinline
+            controls></video>
+          <div class="work-card-body">
+            <span class="work-card-category">Animación & Vídeo</span>
+            <h3 class="work-card-title">Rotoscopia con Fondo</h3>
+            <p class="work-card-desc">Animación mediante técnica de rotoscopia.</p>
+            <div class="work-card-tags">
+              <span class="tag">Animación</span>
+              <span class="tag">Rotoscopia</span>
+              <span class="tag">Photoshop</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="video anim">
+          <video class="work-card-img" src="Imaganes/Mineblend.mkv" autoplay loop muted playsinline controls></video>
+          <div class="work-card-body">
+            <span class="work-card-category">Animación & Vídeo</span>
+            <h3 class="work-card-title">Minecraft animacion</h3>
+            <p class="work-card-desc">Animacion de minecraft blend</p>
+            <div class="work-card-tags">
+              <span class="tag">Animación</span>
+              <span class="tag">Blender</span>
+              <span class="tag">Edicion</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="video anim">
+          <video class="work-card-img" src="Imaganes/RotoStop.mp4" autoplay loop muted playsinline controls></video>
+          <div class="work-card-body">
+            <span class="work-card-category">Animación & Vídeo</span>
+            <h3 class="work-card-title">Edicion stop motion</h3>
+            <p class="work-card-desc">Edicion de video</p>
+            <div class="work-card-tags">
+              <span class="tag">Rotoscopia</span>
+              <span class="tag">StopMotion</span>
+              <span class="tag">Adobe Premier</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===== LINKS ===== -->
+    <div class="LINKS">
+      <h4>ÍNDICE</h4>
+      <nav>
+        <ul class="webs">
+          <li><a href="home.html">HOME</a></li>
+          <li><a href="trabajos.html">PORTAFOLIO</a></li>
+          <li><a href="contacto.html">CONTACTO</a></li>
+          <li><a href="about.html">QUIÉN SOY</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- ===== SUSCRIBE ===== -->
+    <div class="SUSCRIBE">
+      <form action="#" method="post" class="subscribe-form"
+        onsubmit="event.preventDefault(); alert('¡Gracias por suscribirte!');">
+        <h4>SUSCRÍBETE</h4>
+        <label for="correo">CORREO:</label>
+        <input class="correo" type="email" id="correo" name="correo" placeholder="tu@email.com" required>
+        <input type="submit" value="Suscribirse" class="enviarboton">
+      </form>
+    </div>
+
+    <!-- ===== SOCIAL ===== -->
+    <div class="SOCIAL">
+      <div class="Redes">
+        <nav class="redes">
+          <span class="sigueme">SÍGUEME</span>
+          <ul>
+            <li>
+              <a title="YOUTUBE" href="https://www.youtube.com/ZakeriiGames" target="_blank" rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a title="INSTAGRAM" href="https://www.instagram.com/Zakerii_/" target="_blank" rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a title="X" href="https://x.com/Zakerii3" target="_blank" rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <path d="M4 4l11.733 16h4.267l-11.733 -16l-4.267 0" />
+                  <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a title="ARTSTATION" href="https://www.artstation.com" target="_blank" rel="noopener">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M0 17.723l2.027 3.505h.001a2.424 2.424 0 0 0 2.164 1.333h13.457l-2.792-4.838H0zm24 .025c0-.484-.143-.935-.388-1.314L15.728 2.728a2.424 2.424 0 0 0-2.142-1.289H9.419L21.598 22.54l1.92-3.325c.378-.637.482-.919.482-1.467zm-11.129-3.462L7.428 4.858l-5.444 9.428h10.887z" />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a title="GITHUB" href="https://github.com/zakerii" target="_blank" rel="noopener">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+                </svg>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <div class="FOOTER">
+      <h4>© 2026 Zakhar Oleksenko Shapoval. Todos los derechos reservados.</h4>
+      <p>Diseñado por Zakhar Oleksenko Shapoval</p>
+      <p class="email"><a href="mailto:contacto@zakerii.com">contacto@zakerii.com</a></p>
+    </div>
+
+  </div>
+
+  <!-- Subpage Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const searchInput = document.getElementById('portfolioSearch');
+      const cards = document.querySelectorAll('.work-card');
+
+      let currentFilter = 'all';
+
+      function filterPortfolio() {
+        const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
+        cards.forEach(card => {
+          const category = (card.dataset.category || '').toLowerCase();
+          const title = card.querySelector('.work-card-title')?.textContent.toLowerCase() || '';
+          const desc = card.querySelector('.work-card-desc')?.textContent.toLowerCase() || '';
+          const tags = Array.from(card.querySelectorAll('.tag')).map(t => t.textContent.toLowerCase()).join(' ');
+
+          const filterLower = (currentFilter || '').toLowerCase().trim();
+          const categoryMatch = (filterLower === 'all' || category.includes(filterLower));
+          const searchMatch = !query || title.includes(query) || desc.includes(query) || tags.includes(query) || category.includes(query);
+
+          if (categoryMatch && searchMatch) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      }
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentFilter = btn.dataset.filter;
+          filterPortfolio();
+        });
+      });
+
+      if (searchInput) {
+        searchInput.addEventListener('input', filterPortfolio);
+      }
+
+      // Run initial filter check
+      filterPortfolio();
+    });
+  </script>
+</body>
+
+</html>
