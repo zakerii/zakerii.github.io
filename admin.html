@@ -470,10 +470,6 @@
         </div>
 
         <button type="submit" class="btn-admin" style="margin-bottom:12px;">Войти в систему</button>
-
-        <button type="button" id="quickResetAccessBtn" style="width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); color:var(--admin-muted); padding:8px 12px; border-radius:10px; font-size:11px; cursor:pointer; font-weight:600; transition:all 0.2s;">
-          🔑 Сбросить доступ (admin / zakerii2026)
-        </button>
       </form>
     </div>
   </div>
@@ -1235,63 +1231,62 @@
   <!-- ===== SCRIPT ===== -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // 1. Credentials
-      // 1. Universal Studio Access & Credentials
-      const MASTER_LOGINS = ['admin', 'zakerii', 'zakhar'];
-      const MASTER_PASSES = ['zakerii2026', 'admin', 'zakerii'];
-
+      // 1. Server-side Authentication via /api/auth (Cloudflare KV)
       const authOverlay = document.getElementById('authOverlay');
       const loginForm = document.getElementById('loginForm');
       const authError = document.getElementById('authError');
       const logoutBtn = document.getElementById('logoutBtn');
-      const quickResetBtn = document.getElementById('quickResetAccessBtn');
       const togglePassBtn = document.getElementById('togglePassVisibilityBtn');
 
-      if (sessionStorage.getItem('zakerii_admin_logged') === 'true') {
-        authOverlay.style.display = 'none';
+      async function checkExistingSession() {
+        const token = sessionStorage.getItem('zakerii_session_token');
+        if (!token) return;
+        try {
+          const res = await fetch('/api/auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'verify', token })
+          });
+          const data = await res.json();
+          if (data.valid) {
+            authOverlay.style.display = 'none';
+            loadAllData();
+          } else {
+            sessionStorage.removeItem('zakerii_session_token');
+          }
+        } catch (e) {
+          console.error('Session verify failed:', e);
+        }
       }
+      checkExistingSession();
 
-      loginForm.addEventListener('submit', (e) => {
+      loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const u = document.getElementById('adminUser').value.trim();
         const p = document.getElementById('adminPass').value;
 
-        const uLower = u.toLowerCase().trim();
-        const pTrim = p.trim();
-        const storedUser = (localStorage.getItem('zakerii_admin_user') || '').toLowerCase().trim();
-        const storedPass = localStorage.getItem('zakerii_admin_pass');
+        try {
+          const res = await fetch('/api/auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'login', username: u, password: p })
+          });
+          const data = await res.json();
 
-        const isUserValid = MASTER_LOGINS.includes(uLower) || (storedUser && uLower === storedUser);
-        const isPassValid = MASTER_PASSES.includes(p) || MASTER_PASSES.includes(pTrim) || (storedPass && (p === storedPass || pTrim === storedPass));
-
-        if (isUserValid && isPassValid) {
-          sessionStorage.setItem('zakerii_admin_logged', 'true');
-          authOverlay.style.display = 'none';
-          authError.style.display = 'none';
-          try {
+          if (res.ok && data.success && data.token) {
+            sessionStorage.setItem('zakerii_session_token', data.token);
+            authOverlay.style.display = 'none';
+            authError.style.display = 'none';
             loadAllData();
-          } catch (err) {
-            console.error('Error loading data:', err);
+          } else {
+            authError.style.display = 'block';
+            authError.textContent = data.error || 'Неверный логин или пароль.';
           }
-        } else {
+        } catch (err) {
           authError.style.display = 'block';
-          authError.innerHTML = 'Неверный логин или пароль.<br><span style="font-size:11px; color:var(--admin-muted);">Попробуйте admin / zakerii2026 или нажмите кнопку сброса ниже.</span>';
+          authError.textContent = 'Ошибка соединения с сервером авторизации.';
         }
       });
-
-      if (quickResetBtn) {
-        quickResetBtn.addEventListener('click', () => {
-          localStorage.removeItem('zakerii_admin_user');
-          localStorage.removeItem('zakerii_admin_pass');
-          document.getElementById('adminUser').value = 'admin';
-          document.getElementById('adminPass').value = 'zakerii2026';
-          sessionStorage.setItem('zakerii_admin_logged', 'true');
-          authOverlay.style.display = 'none';
-          authError.style.display = 'none';
-          loadAllData();
-          alert('✓ Доступ восстановлен! Стандартный логин: admin, пароль: zakerii2026');
-        });
-      }
 
       if (togglePassBtn) {
         togglePassBtn.addEventListener('click', () => {
@@ -1306,8 +1301,16 @@
         });
       }
 
-      logoutBtn.addEventListener('click', () => {
-        sessionStorage.removeItem('zakerii_admin_logged');
+      logoutBtn.addEventListener('click', async () => {
+        const token = sessionStorage.getItem('zakerii_session_token');
+        sessionStorage.removeItem('zakerii_session_token');
+        if (token) {
+          fetch('/api/auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'logout', token })
+          }).catch(() => {});
+        }
         authOverlay.style.display = 'flex';
       });
 
@@ -2313,19 +2316,38 @@ Zakhar (Zakerii)`;
         reader.readAsText(file);
       });
 
-      // 12. Change Password
-      document.getElementById('changePasswordForm').addEventListener('submit', (e) => {
+      // 12. Change Password (Server-side KV)
+      document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const newU = document.getElementById('newLogin').value.trim();
         const p1 = document.getElementById('newPass').value;
         const p2 = document.getElementById('confirmPass').value;
         if (p1 !== p2) { alert('Пароли не совпадают!'); return; }
         if (p1.length < 6) { alert('Минимум 6 символов!'); return; }
-        localStorage.setItem('zakerii_admin_user', newU);
-        localStorage.setItem('zakerii_admin_pass', p1);
-        const s = document.getElementById('pwdSuccess');
-        s.style.display = 'block';
-        setTimeout(() => { s.style.display = 'none'; }, 4000);
+
+        const token = sessionStorage.getItem('zakerii_session_token');
+        try {
+          const res = await fetch('/api/auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              action: 'change_password',
+              token,
+              newUsername: newU,
+              newPassword: p1
+            })
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            const s = document.getElementById('pwdSuccess');
+            s.style.display = 'block';
+            setTimeout(() => { s.style.display = 'none'; }, 4000);
+          } else {
+            alert(data.error || 'Ошибка смены пароля');
+          }
+        } catch (err) {
+          alert('Ошибка сети: ' + err.message);
+        }
       });
 
       // 13. AI STUDIO & SCRIPT GENERATOR
