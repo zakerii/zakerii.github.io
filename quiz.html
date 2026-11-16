@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Quiz 4 Family — Interactive Web Trivia</title>
+  <meta name="description" content="Play interactive family trivia & video game quizzes with real-time score and timer!">
+  <link rel="icon" type="image/png" href="Imaganes/LOGO.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card-bg: rgba(22, 27, 34, 0.85);
+      --accent: #10b981;
+      --accent-glow: rgba(16, 185, 129, 0.35);
+      --border: rgba(255, 255, 255, 0.1);
+      --correct: #10b981;
+      --wrong: #ef4444;
+      --text: #f0f6fc;
+      --text-muted: #8b949e;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: radial-gradient(circle at 50% 0%, #16241e 0%, var(--bg) 75%);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+
+    .quiz-container {
+      width: 100%;
+      max-width: 580px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      backdrop-filter: blur(16px);
+      padding: 32px 24px;
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), 0 0 30px -10px var(--accent-glow);
+      position: relative;
+    }
+
+    .quiz-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 6px 12px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .timer-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fbbf24;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #10b981, #06b6d4);
+      transition: width 0.3s ease;
+    }
+
+    .question-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 24px;
+      color: #fff;
+    }
+
+    .answers-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .answer-btn {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      padding: 16px 20px;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s ease;
+    }
+
+    .answer-btn:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .answer-key {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .answer-btn.correct {
+      background: rgba(16, 185, 129, 0.25) !important;
+      border-color: #10b981 !important;
+      color: #a7f3d0 !important;
+    }
+
+    .answer-btn.wrong {
+      background: rgba(239, 68, 68, 0.25) !important;
+      border-color: #ef4444 !important;
+      color: #fecaca !important;
+    }
+
+    .quiz-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+
+    /* Result Screen */
+    .result-screen {
+      display: none;
+      text-align: center;
+      padding: 16px 0;
+    }
+
+    .result-icon {
+      font-size: 3.5rem;
+      margin-bottom: 12px;
+    }
+
+    .result-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .result-score {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 16px;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .action-btn {
+      background: var(--accent);
+      color: #0b0d13;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 8px;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px -5px var(--accent-glow);
+    }
+
+    .secondary-btn {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+    .secondary-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="quiz-container">
+    
+    <!-- Gameplay view -->
+    <div id="gameView">
+      <div class="quiz-header">
+        <div class="badge">🧩 @Quiz4Family Edition</div>
+        <div class="timer-wrap">
+          <span>⏱️</span>
+          <span id="timerText">15s</span>
+        </div>
+      </div>
+
+      <div class="progress-bar-bg">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <h2 class="question-title" id="questionText">Loading quiz question...</h2>
+
+      <div class="answers-grid" id="answersGrid"></div>
+
+      <div class="quiz-footer">
+        <span id="questionCounter">Вопрос 1 из 5</span>
+        <span id="scoreText">Очки: 0</span>
+      </div>
+    </div>
+
+    <!-- Result view -->
+    <div id="resultView" class="result-screen">
+      <div class="result-icon" id="resultEmoji">🏆</div>
+      <h2 class="result-title" id="resultHeading">Отличный результат!</h2>
+      <p style="color: #9ca3af; margin-bottom: 20px;">Ты прошел ежедневный квиз Quiz 4 Family</p>
+
+      <div class="result-score" id="finalScore">0 / 5</div>
+
+      <div>
+        <button class="action-btn" onclick="restartQuiz()">🔄 Сыграть снова</button>
+        <button class="action-btn secondary-btn" onclick="shareResult()">📢 Поделиться</button>
+      </div>
+
+      <div style="margin-top: 24px;">
+        <a href="https://www.youtube.com/@Quiz4Family" target="_blank" style="color: #10b981; font-weight:600; text-decoration:none; font-size:0.9rem;">
+          ▶️ Смотреть новые выпуски на @Quiz4Family →
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const questions = [
+      {
+        q: "Какая игра стала рекордсменом по продажам за всю историю индустрии?",
+        answers: ["Minecraft", "Tetris", "Grand Theft Auto V", "Wii Sports"],
+        correct: 0
+      },
+      {
+        q: "Какой год считается годом выхода легендарного первого фильма 'Шрек'?",
+        answers: ["1999", "2001", "2003", "2005"],
+        correct: 1
+      },
+      {
+        q: "Сколько граней у стандартного классического кубика Рубика (3x3)?",
+        answers: ["4", "6", "8", "12"],
+        correct: 1
+      },
+      {
+        q: "Какой персонаж видеоигр изначально носил имя 'Jumpman'?",
+        answers: ["Sonic", "Pac-Man", "Mario", "Mega Man"],
+        correct: 2
+      },
+      {
+        q: "Какой химический элемент обозначается символом 'Au'?",
+        answers: ["Серебро", "Медь", "Алюминий", "Золото"],
+        correct: 3
+      }
+    ];
+
+    let currentIdx = 0;
+    let score = 0;
+    let timer = 15;
+    let interval = null;
+
+    function startTimer() {
+      timer = 15;
+      document.getElementById('timerText').textContent = timer + 's';
+      clearInterval(interval);
+      interval = setInterval(() => {
+        timer--;
+        document.getElementById('timerText').textContent = timer + 's';
+        if (timer <= 0) {
+          clearInterval(interval);
+          selectAnswer(-1); // Timeout
+        }
+      }, 1000);
+    }
+
+    function renderQuestion() {
+      const q = questions[currentIdx];
+      document.getElementById('questionText').textContent = q.q;
+      document.getElementById('questionCounter').textContent = `Вопрос ${currentIdx + 1} из ${questions.length}`;
+      document.getElementById('progressBar').style.width = `${((currentIdx) / questions.length) * 100}%`;
+      document.getElementById('scoreText').textContent = `Очки: ${score}`;
+
+      const grid = document.getElementById('answersGrid');
+      grid.innerHTML = '';
+
+      const letters = ['A', 'B', 'C', 'D'];
+      q.answers.forEach((ans, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'answer-btn';
+        btn.innerHTML = `<span class="answer-key">${letters[i]}</span> <span>${ans}</span>`;
+        btn.onclick = () => selectAnswer(i);
+        grid.appendChild(btn);
+      });
+
+      startTimer();
+    }
+
+    function selectAnswer(index) {
+      clearInterval(interval);
+      const q = questions[currentIdx];
+      const buttons = document.querySelectorAll('.answer-btn');
+
+      buttons.forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === q.correct) btn.classList.add('correct');
+        if (i === index && index !== q.correct) btn.classList.add('wrong');
+      });
+
+      if (index === q.correct) {
+        score++;
+        document.getElementById('scoreText').textContent = `Очки: ${score}`;
+      }
+
+      setTimeout(() => {
+        currentIdx++;
+        if (currentIdx < questions.length) {
+          renderQuestion();
+        } else {
+          showResults();
+        }
+      }, 1200);
+    }
+
+    function showResults() {
+      document.getElementById('gameView').style.display = 'none';
+      document.getElementById('resultView').style.display = 'block';
+      document.getElementById('finalScore').textContent = `${score} / ${questions.length}`;
+
+      if (score === 5) {
+        document.getElementById('resultEmoji').textContent = '👑';
+        document.getElementById('resultHeading').textContent = 'Идеальный результат! 100%';
+      } else if (score >= 3) {
+        document.getElementById('resultEmoji').textContent = '🎉';
+        document.getElementById('resultHeading').textContent = 'Отличная эрудиция!';
+      } else {
+        document.getElementById('resultEmoji').textContent = '💡';
+        document.getElementById('resultHeading').textContent = 'Хорошая попытка!';
+      }
+    }
+
+    function restartQuiz() {
+      currentIdx = 0;
+      score = 0;
+      document.getElementById('resultView').style.display = 'none';
+      document.getElementById('gameView').style.display = 'block';
+      renderQuestion();
+    }
+
+    function shareResult() {
+      const text = `Мой результат в викторине @Quiz4Family: ${score}/${questions.length}! Сможешь побить мой рекорд? 👉 https://zakerii.com/quiz`;
+      if (navigator.share) {
+        navigator.share({ title: 'Quiz 4 Family', text: text, url: 'https://zakerii.com/quiz' });
+      } else {
+        navigator.clipboard.writeText(text);
+        alert('Результат скопирован! Отправь его друзьям или в комментарии на YouTube!');
+      }
+    }
+
+    renderQuestion();
+  </script>
+</body>
+</html>

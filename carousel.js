@@ -116,6 +116,8 @@ class ModernCarousel {
   }
 
   createControls() {
+    this.container.querySelectorAll('.carousel-arrow, .carousel-badge').forEach(el => el.remove());
+
     // Left & Right Prev/Next Buttons
     const prevBtn = document.createElement('button');
     prevBtn.className = 'carousel-arrow carousel-prev';

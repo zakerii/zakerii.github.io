@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Zakerii — Bio Links & Projects</title>
+  <meta name="description" content="Zakhar (Zakerii) — 3D & 2D Animation, YouTube Documentaries, Interactive Media & Contact">
+  <link rel="icon" type="image/png" href="Imaganes/LOGO.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0b0d13;
+      --card-bg: rgba(22, 27, 39, 0.75);
+      --card-hover: rgba(35, 43, 62, 0.95);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(139, 92, 246, 0.4);
+      --accent: #8b5cf6;
+      --accent-glow: rgba(139, 92, 246, 0.35);
+      --accent-cyan: #06b6d4;
+      --accent-red: #ef4444;
+      --accent-amber: #f59e0b;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 0%, #171b29 0%, var(--bg) 70%);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 16px 60px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Ambient background glow */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 540px;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Avatar & Profile */
+    .profile {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .avatar-wrap {
+      position: relative;
+      width: 104px;
+      height: 104px;
+      margin: 0 auto 16px;
+    }
+
+    .avatar-ring {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-cyan));
+      filter: blur(6px);
+      opacity: 0.8;
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.06); opacity: 1; }
+    }
+
+    .avatar {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #1a1e2d;
+      background: #111420;
+    }
+
+    .name-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.55rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+
+    .verified-icon {
+      color: #38bdf8;
+      display: inline-flex;
+    }
+
+    .handle {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .bio {
+      font-size: 0.92rem;
+      line-height: 1.45;
+      color: #d1d5db;
+      max-width: 420px;
+      margin: 0 auto 18px;
+    }
+
+    .pill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+
+    .pill {
+      font-size: 0.78rem;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: #cbd5e1;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    /* Section Headers */
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      width: 100%;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #94a3b8;
+      margin: 18px 0 10px 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Link Cards */
+    .links-list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .link-card {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      padding: 14px 18px;
+      border-radius: 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .link-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 4px;
+      background: var(--accent);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .link-card:hover, .link-card:active {
+      transform: translateY(-2px);
+      background: var(--card-hover);
+      border-color: var(--border-hover);
+      box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.5), 0 0 15px -3px var(--accent-glow);
+    }
+
+    .link-card:hover::before {
+      opacity: 1;
+    }
+
+    .card-icon-wrap {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-right: 14px;
+      font-size: 1.35rem;
+      transition: transform 0.2s ease;
+    }
+
+    .link-card:hover .card-icon-wrap {
+      transform: scale(1.08);
+    }
+
+    .card-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.98rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-arrow {
+      color: #64748b;
+      margin-left: 10px;
+      transition: transform 0.2s ease, color 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .link-card:hover .card-arrow {
+      transform: translateX(4px);
+      color: #fff;
+    }
+
+    /* Channel specific accents */
+    .card-buildfailed::before { background: #ef4444; }
+    .card-patchzero::before { background: #38bdf8; }
+    .card-quiz::before { background: #10b981; }
+    .card-zakerii::before { background: #a855f7; }
+    .card-sponsor::before { background: #f59e0b; }
+
+    /* Quick Action Copy Button */
+    .copy-banner {
+      width: 100%;
+      margin-top: 14px;
+      padding: 14px 18px;
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px dashed rgba(245, 158, 11, 0.35);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .copy-banner:hover {
+      background: rgba(245, 158, 11, 0.14);
+      border-color: rgba(245, 158, 11, 0.6);
+    }
+
+    .copy-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .copy-text {
+      font-size: 0.86rem;
+      font-weight: 500;
+      color: #fde68a;
+    }
+
+    .copy-sub {
+      font-size: 0.74rem;
+      color: #d97706;
+    }
+
+    .copy-btn {
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fef3c7;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      pointer-events: none;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 36px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+
+    footer a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    footer a:hover {
+      color: #fff;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #10b981;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+
+    <!-- Profile Header -->
+    <header class="profile">
+      <div class="avatar-wrap">
+        <div class="avatar-ring"></div>
+        <img src="Imaganes/LOGO.png" alt="Zakerii Avatar" class="avatar">
+      </div>
+
+      <div class="name-badge">
+        <h1 class="name">Zakhar • Zakerii</h1>
+        <span class="verified-icon" title="Official Creator">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+        </span>
+      </div>
+
+      <div class="handle">@zakerii • zakerii.com</div>
+      <p class="bio">3D & 2D Animation, Interactive Tech & YouTube Documentaries.</p>
+
+      <div class="pill-tags">
+        <span class="pill">🎬 Creator</span>
+        <span class="pill">🎨 2D/3D Artist</span>
+        <span class="pill">⚙️ Game Dev</span>
+        <span class="pill">⚡ Automation</span>
+      </div>
+    </header>
+
+    <!-- Section 1: YouTube Channels -->
+    <div class="section-title">📺 YouTube Channels & Media</div>
+    <div class="links-list" id="channelsList">
+      
+      <!-- Build Failed -->
+      <a href="https://www.youtube.com/@BuildFailedYT" target="_blank" rel="noopener" class="link-card card-buildfailed" data-track="buildfailed">
+        <div class="card-icon-wrap" style="color: #ef4444;">🔴</div>
+        <div class="card-content">
+          <div class="card-title">Build Failed (@BuildFailedYT)</div>
+          <div class="card-desc">Deep-dive video game & tech documentaries (10-15 min)</div>
+        </div>
+        <div class="card-arrow">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+        </div>
+      </a>
+
+      <!-- Patch Zero Shorts -->
+      <a href="https://www.youtube.com/@PatchZeroShorts" target="_blank" rel="noopener" class="link-card card-patchzero" data-track="patchzero">
+        <div class="card-icon-wrap" style="color: #38bdf8;">⚡</div>
+        <div class="card-content">
+          <div class="card-title">Patch Zero (@PatchZeroShorts)</div>
+          <div class="card-desc">Tech curiosities, development secrets & 60s shorts</div>
+        </div>
+        <div class="card-arrow">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+        </div>
+      </a>
+
+      <!-- Quiz 4 Family -->
+      <a href="https://www.youtube.com/@Quiz4Family" target="_blank" rel="noopener" class="link-card card-quiz" data-track="quiz4family">
+        <div class="card-icon-wrap" style="color: #10b981;">🧩</div>
+        <div class="card-content">
+          <div class="card-title">Quiz 4 Family (@Quiz4Family)</div>
+          <div class="card-desc">Interactive daily family trivia & quizzes</div>
+        </div>
+        <div class="card-arrow">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+        </div>
+      </a>
+
+      <!-- Zakerii Gaming -->
+      <a href="https://www.youtube.com" target="_blank" rel="noopener" class="link-card card-zakerii" data-track="zakerii_yt">
+        <div class="card-icon-wrap" style="color: #a855f7;">🎮</div>
+        <div class="card-content">
+          <div class="card-title">Zakerii (Main Channel)</div>
+          <div class="card-desc">Gaming, reviews, Minecraft & creative showcase</div>
+        </div>
+        <div class="card-arrow">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Section 2: Interactive & Resources -->
+    <div class="section-title">✨ Interactive & Free Assets</div>
+    <div class="links-list">
+
+      <!-- Web Quiz -->
+      <a href="quiz.html" class="link-card" data-track="interactive_quiz">
+        <div class="card-icon-wrap" style="color: #f59e0b;">🎯</div>
+        <div class="card-content">
+          <div class="card-title">Play Interactive Web Quiz</div>
+          <div class="card-desc">Test your knowledge with real-time timers & leaderboards</div>
+        </div>
+        <div class="card-arrow">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+        </div>
+      </a>
+
+      <!-- Free Downloads & Packs -->
+      <a href="downloads.html" class="link-card" data-track="assets_download">
+        <div class="card-icon-wrap" style="color: #06b6d4;">📦</div>
+        <div class="card-content">
+          <div class="card-title">Free Creator Packs & Assets</div>
+          <div class="card-desc">Download AE presets, SFX packs, 3D models & wallpapers</div>
+        </div>
+        <div class="card-arrow">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+        </div>
+      </a>
+
+      <!-- 3D & 2D Portfolio -->
+      <a href="trabajos.html" class="link-card" data-track="portfolio">
+        <div class="card-icon-wrap" style="color: #8b5cf6;">🕶️</div>
+        <div class="card-content">
+          <div class="card-title">Interactive 3D & Portfolio</div>
+          <div class="card-desc">Browse projects, interactive 3D viewer & animations</div>
+        </div>
+        <div class="card-arrow">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Section 3: Business & Contact -->
+    <div class="section-title">💼 Business & Sponsorships</div>
+    
+    <!-- Sponsor One-Click Copy -->
+    <div class="copy-banner" onclick="copyEmail('sponsor@zakerii.com')" title="Click to copy official sponsor email">
+      <div class="copy-info">
+        <div class="card-icon-wrap" style="background: transparent; border:none; margin:0; width:auto; height:auto; font-size:1.4rem;">📩</div>
+        <div>
+          <div class="copy-text">sponsor@zakerii.com</div>
+          <div class="copy-sub">Official Sponsorships & Business Inquiries</div>
+        </div>
+      </div>
+      <div class="copy-btn" id="copyBtn">Copy</div>
+    </div>
+
+    <!-- General Contact Form -->
+    <div class="links-list" style="margin-top: 12px;">
+      <a href="contacto.html" class="link-card" data-track="contact_page">
+        <div class="card-icon-wrap" style="color: #3b82f6;">💬</div>
+        <div class="card-content">
+          <div class="card-title">Direct Contact & Commission</div>
+          <div class="card-desc">Send a project brief or work inquiry</div>
+        </div>
+        <div class="card-arrow">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+        </div>
+      </a>
+    </div>
+
+    <!-- Custom Ecosystem Links from Cloudflare KV -->
+    <div id="dynamicLinksSection" style="display:none; width: 100%;">
+      <div class="section-title">🔗 Community & Links</div>
+      <div class="links-list" id="dynamicLinksContainer"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>© 2026 Zakhar Oleksenko Shapoval • <a href="home.html">zakerii.com</a></p>
+    </footer>
+
+  </div>
+
+  <div class="toast" id="toast">✓ Copied to clipboard!</div>
+
+  <script>
+    // Copy email helper
+    function copyEmail(email) {
+      navigator.clipboard.writeText(email).then(() => {
+        showToast('✓ ' + email + ' copied!');
+        const btn = document.getElementById('copyBtn');
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy', 2000);
+      }).catch(() => {
+        prompt('Copy email:', email);
+      });
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2400);
+    }
+
+    // Analytics click tracking
+    document.querySelectorAll('[data-track]').forEach(el => {
+      el.addEventListener('click', () => {
+        const id = el.getAttribute('data-track');
+        if (navigator.sendBeacon) {
+          navigator.sendBeacon('/api/analytics', JSON.stringify({ event: 'bio_click', target: id, timestamp: Date.now() }));
+        }
+      });
+    });
+
+    // Load custom dynamic links from Cloudflare KV (/api/links) if available
+    async function loadDynamicLinks() {
+      try {
+        const res = await fetch('/api/links');
+        if (!res.ok) return;
+        const links = await res.json();
+        if (Array.isArray(links) && links.length > 0) {
+          const container = document.getElementById('dynamicLinksContainer');
+          container.innerHTML = links.map(l => `
+            <a href="${l.url}" target="_blank" rel="noopener" class="link-card" data-track="kv_${l.id}">
+              <div class="card-icon-wrap">${l.icon || '🔗'}</div>
+              <div class="card-content">
+                <div class="card-title">${l.title}</div>
+                <div class="card-desc">${l.desc || l.url}</div>
+              </div>
+              <div class="card-arrow">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+              </div>
+            </a>
+          `).join('');
+          document.getElementById('dynamicLinksSection').style.display = 'block';
+        }
+      } catch (e) {
+        // Fallback silently if offline or KV empty
+      }
+    }
+    loadDynamicLinks();
+  </script>
+</body>
+</html>

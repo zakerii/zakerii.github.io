@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Zakerii — Creator Freebies & Asset Hub</title>
+  <meta name="description" content="Free After Effects presets, SFX audio packs, 3D assets and wallpapers by Zakhar (Zakerii).">
+  <link rel="icon" type="image/png" href="Imaganes/LOGO.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: rgba(18, 24, 38, 0.8);
+      --card-hover: rgba(28, 38, 60, 0.95);
+      --border: rgba(255, 255, 255, 0.08);
+      --accent: #06b6d4;
+      --accent-glow: rgba(6, 182, 212, 0.35);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: radial-gradient(circle at 50% 0%, #152238 0%, var(--bg) 75%);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 40px 16px 80px;
+    }
+
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      margin-bottom: 20px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #fff 40%, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    .assets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 480px) {
+      .assets-grid { grid-template-columns: 1fr; }
+    }
+
+    .asset-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      backdrop-filter: blur(14px);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .asset-card:hover {
+      transform: translateY(-3px);
+      background: var(--card-hover);
+      border-color: rgba(6, 182, 212, 0.4);
+      box-shadow: 0 14px 30px -10px rgba(0, 0, 0, 0.5), 0 0 20px -5px var(--accent-glow);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: rgba(6, 182, 212, 0.1);
+      border: 1px solid rgba(6, 182, 212, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+    }
+
+    .tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+    }
+
+    .tag.free {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .card-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 20px;
+      flex: 1;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 0.82rem;
+      color: #64748b;
+    }
+
+    .download-btn {
+      background: linear-gradient(135deg, #06b6d4, #3b82f6);
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .download-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <a href="links.html" class="back-btn">← Назад к ссылкам</a>
+      <h1>Creator Asset Hub</h1>
+      <p class="subtitle">Бесплатные наборы для монтажа, звуковые пакеты, анимации и 3D-ассеты от Zakhar (Zakerii).</p>
+    </header>
+
+    <div class="assets-grid">
+
+      <!-- Item 1: SFX Pack -->
+      <div class="asset-card">
+        <div>
+          <div class="card-top">
+            <div class="card-icon" style="color: #06b6d4;">🎧</div>
+            <span class="tag free">100% Free</span>
+          </div>
+          <h3 class="card-title">Dark Ambient & Cinematic SFX Pack</h3>
+          <p class="card-desc">Фирменная подборка звуковых переходов, swoosh, risers и атмосферных дронов, используемых в лонгридах Build Failed.</p>
+        </div>
+        <div class="card-meta">
+          <span>Формат: WAV 24-bit • 45 MB</span>
+          <button class="download-btn" onclick="alert('Скачивание начнется при подключении файла к Cloudflare R2!')">📥 Скачать</button>
+        </div>
+      </div>
+
+      <!-- Item 2: AE Presets -->
+      <div class="asset-card">
+        <div>
+          <div class="card-top">
+            <div class="card-icon" style="color: #a855f7;">⚡</div>
+            <span class="tag free">After Effects</span>
+          </div>
+          <h3 class="card-title">Smooth Motion & Zoom Presets</h3>
+          <p class="card-desc">Набор анимационных кривых и зум-переходов для динамичных роликов и коротких видео (Shorts/Reels).</p>
+        </div>
+        <div class="card-meta">
+          <span>Формат: .ffx Preset • 2.4 MB</span>
+          <button class="download-btn" onclick="alert('Скачивание начнется при подключении файла к Cloudflare R2!')">📥 Скачать</button>
+        </div>
+      </div>
+
+      <!-- Item 3: 3D Pack -->
+      <div class="asset-card">
+        <div>
+          <div class="card-top">
+            <div class="card-icon" style="color: #10b981;">📦</div>
+            <span class="tag free">3D / Game Ready</span>
+          </div>
+          <h3 class="card-title">Low-Poly Cyberpunk Props Bundle</h3>
+          <p class="card-desc">Оптимизированные 3D-модели окружения с запеченными текстурами для Blender, Unity и веб-интерфейсов.</p>
+        </div>
+        <div class="card-meta">
+          <span>Формат: FBX + GLTF + Textures</span>
+          <button class="download-btn" onclick="alert('Скачивание начнется при подключении файла к Cloudflare R2!')">📥 Скачать</button>
+        </div>
+      </div>
+
+      <!-- Item 4: Storyboard Template -->
+      <div class="asset-card">
+        <div>
+          <div class="card-top">
+            <div class="card-icon" style="color: #f59e0b;">📝</div>
+            <span class="tag free">Print & Digital</span>
+          </div>
+          <h3 class="card-title">Director Storyboard & Timeline Grid</h3>
+          <p class="card-desc">Чистый шаблон раскадровки (16:9 и 9:16) с разметкой для звуковых дорожек, таймкодов и примечаний режиссера.</p>
+        </div>
+        <div class="card-meta">
+          <span>Формат: PDF + PSD</span>
+          <button class="download-btn" onclick="alert('Скачивание начнется при подключении файла к Cloudflare R2!')">📥 Скачать</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

@@ -102,50 +102,55 @@
             style="font-size: 20px; font-weight: 700; margin-bottom: 20px; color: var(--primary);">FORMULARIO DE PEDIDO
           </h2>
 
-          <form class="pedir"
-            onsubmit="event.preventDefault(); if (window.soundEngine) window.soundEngine.playSuccess(); alert('¡Pedido enviado con éxito! Nos pondremos en contacto contigo pronto.');">
+          <form class="pedir" id="orderForm" action="https://formsubmit.co/pr.zakerii@gmail.com" method="POST">
+            <!-- FormSubmit Configuration -->
+            <input type="hidden" name="_subject" value="¡Nuevo pedido de servicio desde zakerii.com!">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_captcha" value="false">
+
             <div class="form-group">
               <label for="nombre">NOMBRE:</label>
-              <input type="text" id="nombre" class="form-control" placeholder="Tu nombre completo" required>
+              <input type="text" id="nombre" name="Nombre" class="form-control" placeholder="Tu nombre completo" required>
             </div>
 
             <div class="form-group">
               <label for="email">CORREO ELECTRÓNICO:</label>
-              <input type="email" id="email" class="form-control" placeholder="ejemplo@correo.com" required>
+              <input type="email" id="email" name="Email" class="form-control" placeholder="ejemplo@correo.com" required>
             </div>
 
             <div class="form-group">
               <label for="telefono">TELÉFONO (OPCIONAL):</label>
-              <input type="tel" id="telefono" class="form-control" placeholder="+34 600 000 000">
+              <input type="tel" id="telefono" name="Telefono" class="form-control" placeholder="+34 600 000 000">
             </div>
 
             <div class="form-group">
               <label for="fecha">FECHA:</label>
-              <input type="date" id="fecha" class="form-control">
+              <input type="date" id="fecha" name="Fecha_Estimada" class="form-control">
             </div>
 
             <div class="form-group">
               <label for="producto">TIPO DE SERVICIO:</label>
-              <select id="producto" class="form-control">
-                <option value="modelado">Modelado 3D (Low/High Poly)</option>
-                <option value="texturado">Texturizado & Shaders PBR</option>
-                <option value="animacion">Animación 2D / 3D</option>
-                <option value="edicion">Edición de Vídeo & Color Grading</option>
+              <select id="producto" name="Tipo_de_Servicio" class="form-control">
+                <option value="Modelado 3D (Low/High Poly)">Modelado 3D (Low/High Poly)</option>
+                <option value="Texturizado & Shaders PBR">Texturizado & Shaders PBR</option>
+                <option value="Animación 2D / 3D">Animación 2D / 3D</option>
+                <option value="Edición de Vídeo & Color Grading">Edición de Vídeo & Color Grading</option>
               </select>
             </div>
 
             <div class="form-group">
               <label for="desc">DESCRIPCIÓN DEL PEDIDO:</label>
-              <textarea id="desc" class="form-control" placeholder="Detalla las características de tu proyecto..."
+              <textarea id="desc" name="Descripcion" class="form-control" placeholder="Detalla las características de tu proyecto..."
                 required></textarea>
             </div>
 
             <div class="form-group">
               <label for="pago">MÉTODO DE PAGO PREFERIDO:</label>
-              <select id="pago" class="form-control">
-                <option value="paypal">PayPal</option>
-                <option value="transferencia">Transferencia Bancaria</option>
-                <option value="bizum">Bizum</option>
+              <select id="pago" name="Metodo_de_Pago" class="form-control">
+                <option value="Revolut / Revolut Pay">Revolut / Revolut Pay (Apple Pay / Tarjeta)</option>
+                <option value="Bizum">Bizum</option>
+                <option value="PayPal">PayPal</option>
+                <option value="Transferencia Bancaria">Transferencia Bancaria (IBAN)</option>
               </select>
             </div>
 
@@ -155,8 +160,75 @@
                 servicio</label>
             </div>
 
-            <button type="submit" class="btn-submit">Suscribirse </button>
+            <button type="submit" class="btn-submit" id="submitBtn">Enviar Pedido</button>
+            <div id="formStatus" style="display:none; margin-top: 15px; padding: 12px; border-radius: 8px; text-align: center; font-size: 14px; font-weight: 600;"></div>
           </form>
+
+          <script>
+            document.addEventListener('DOMContentLoaded', () => {
+              const form = document.getElementById('orderForm');
+              const submitBtn = document.getElementById('submitBtn');
+              const statusDiv = document.getElementById('formStatus');
+
+              if (form) {
+                form.addEventListener('submit', async (e) => {
+                  e.preventDefault();
+                  submitBtn.disabled = true;
+                  const originalText = submitBtn.textContent;
+                  submitBtn.textContent = 'Enviando...';
+
+                  try {
+                    const formData = new FormData(form);
+                    const response = await fetch("https://formsubmit.co/ajax/pr.zakerii@gmail.com", {
+                      method: "POST",
+                      body: formData,
+                      headers: {
+                        'Accept': 'application/json'
+                      }
+                    });
+
+                    if (response.ok) {
+                      // Save locally for Admin Panel
+                      try {
+                        const newOrder = {
+                          id: Date.now(),
+                          nombre: formData.get("Nombre") || "Cliente",
+                          email: formData.get("Email") || "",
+                          telefono: formData.get("Telefono") || "-",
+                          fecha: formData.get("Fecha_Estimada") || new Date().toISOString().split("T")[0],
+                          servicio: formData.get("Tipo_de_Servicio") || "Servicio",
+                          descripcion: formData.get("Descripcion") || "",
+                          pago: formData.get("Metodo_de_Pago") || "PayPal",
+                          dateCreated: new Date().toLocaleString()
+                        };
+                        let existing = JSON.parse(localStorage.getItem("zakerii_orders") || "[]");
+                        existing.unshift(newOrder);
+                        localStorage.setItem("zakerii_orders", JSON.stringify(existing));
+                      } catch (e) {}
+
+                      if (window.soundEngine && typeof window.soundEngine.playSuccess === 'function') {
+                        window.soundEngine.playSuccess();
+                      }
+                      statusDiv.style.display = 'block';
+                      statusDiv.style.background = 'rgba(0, 240, 255, 0.15)';
+                      statusDiv.style.border = '1px solid #00f0ff';
+                      statusDiv.style.color = '#00f0ff';
+                      statusDiv.textContent = '¡Pedido enviado con éxito! Te responderé lo antes posible a tu correo.';
+                      form.reset();
+                    } else {
+                      throw new Error('Error al enviar');
+                    }
+                  } catch (err) {
+                    // Fallback to standard submit if AJAX fails
+                    form.submit();
+                  } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                  }
+                });
+              }
+            });
+          </script>
         </div>
 
         <!-- RIGHT: Pricing Guide -->
@@ -204,6 +276,144 @@
 
       </div>
     </div>
+
+    
+    <!-- ===== SECCIÓN DE RESEÑAS Y TESTIMONIOS ===== -->
+    <div style="grid-column: 1 / -1; margin-top: 40px; padding: 30px; background: rgba(14, 18, 28, 0.7); border: 1px solid var(--primary, #00f0ff); border-radius: 16px; box-shadow: 0 4px 25px rgba(0,0,0,0.4);">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; margin-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:14px;">
+        <div>
+          <h2 style="font-size: 20px; font-weight:800; color:#fff; letter-spacing:0.05em; display:flex; align-items:center; gap:8px;">
+            <span>⭐</span> RESEÑAS DE CLIENTES
+          </h2>
+          <p style="font-size: 13px; color: var(--text-muted, #8b9bb4); margin-top:4px;">
+            Opiniones reales de creadores, estudios y clientes que han trabajado conmigo
+          </p>
+        </div>
+        <button id="openReviewModalBtn" class="filter-btn active" style="cursor:pointer; padding: 10px 18px; border-radius: 20px; font-weight:700;">
+          ✍️ Dejar una Reseña
+        </button>
+      </div>
+
+      <div id="publicReviewsGrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:16px;">
+        <p style="color:var(--text-muted); font-size:13px;">Cargando opiniones...</p>
+      </div>
+    </div>
+
+    <!-- Review Submission Modal -->
+    <div id="clientReviewModal" style="position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); z-index:10000; display:none; align-items:center; justify-content:center; padding:20px;">
+      <div style="width:100%; max-width:480px; background:#0d121c; border:1px solid var(--primary, #00f0ff); border-radius:18px; padding:28px; box-shadow:0 10px 40px rgba(0,0,0,0.8);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+          <h3 style="font-size:18px; font-weight:800; color:#fff;">✍️ Tu Opinión</h3>
+          <button id="closeReviewModalBtn" style="background:none; border:none; color:#888; font-size:22px; cursor:pointer;">&times;</button>
+        </div>
+
+        <form id="publicReviewForm">
+          <div style="margin-bottom:14px;">
+            <label style="display:block; font-size:11px; font-weight:700; color:var(--primary, #00f0ff); margin-bottom:6px;">TU NOMBRE O ALIAS</label>
+            <input type="text" id="revName" required style="width:100%; padding:10px 14px; background:rgba(0,0,0,0.7); border:1px solid rgba(255,255,255,0.15); border-radius:10px; color:#fff; font-size:14px;">
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <label style="display:block; font-size:11px; font-weight:700; color:var(--primary, #00f0ff); margin-bottom:6px;">PROYECTO O ENCARGO REALIZADO</label>
+            <input type="text" id="revProject" placeholder="Ej: Animación 2D, Modelo 3D, Texturizado..." required style="width:100%; padding:10px 14px; background:rgba(0,0,0,0.7); border:1px solid rgba(255,255,255,0.15); border-radius:10px; color:#fff; font-size:14px;">
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <label style="display:block; font-size:11px; font-weight:700; color:var(--primary, #00f0ff); margin-bottom:6px;">VALORACIÓN</label>
+            <select id="revRating" style="width:100%; padding:10px 14px; background:rgba(0,0,0,0.7); border:1px solid rgba(255,255,255,0.15); border-radius:10px; color:#fff; font-size:14px;">
+              <option value="5">⭐⭐⭐⭐⭐ (5/5 Excelente)</option>
+              <option value="4">⭐⭐⭐⭐ (4/5 Muy bueno)</option>
+              <option value="3">⭐⭐⭐ (3/5 Bueno)</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom:18px;">
+            <label style="display:block; font-size:11px; font-weight:700; color:var(--primary, #00f0ff); margin-bottom:6px;">TU RESEÑA</label>
+            <textarea id="revText" rows="3" required placeholder="Cuéntanos cómo fue tu experiencia de trabajo con Zakhar..." style="width:100%; padding:10px 14px; background:rgba(0,0,0,0.7); border:1px solid rgba(255,255,255,0.15); border-radius:10px; color:#fff; font-size:14px;"></textarea>
+          </div>
+
+          <button type="submit" id="submitReviewBtn" class="filter-btn active" style="width:100%; padding:12px; font-weight:700; border-radius:10px; cursor:pointer;">
+            Enviar Reseña
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', async () => {
+        const grid = document.getElementById('publicReviewsGrid');
+        const modal = document.getElementById('clientReviewModal');
+        const openBtn = document.getElementById('openReviewModalBtn');
+        const closeBtn = document.getElementById('closeReviewModalBtn');
+        const form = document.getElementById('publicReviewForm');
+
+        if (openBtn) openBtn.onclick = () => modal.style.display = 'flex';
+        if (closeBtn) closeBtn.onclick = () => modal.style.display = 'none';
+
+        async function loadPublicReviews() {
+          try {
+            const resp = await fetch('/api/testimonials?public=true');
+            if (!resp.ok) return;
+            const list = await resp.json();
+            if (!list || list.length === 0) {
+              grid.innerHTML = '<p style="color:var(--text-muted); font-size:13px;">Aún no hay reseñas publicadas. ¡Sé el primero en dejar una!</p>';
+              return;
+            }
+            grid.innerHTML = list.map(r => `
+              <div style="background:rgba(10,13,20,0.8); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:18px; display:flex; flex-direction:column; justify-content:space-between;">
+                <div>
+                  <div style="color:#ffa502; font-size:14px; margin-bottom:8px;">${'⭐'.repeat(r.rating || 5)}</div>
+                  <p style="font-size:13px; font-style:italic; color:#e2e8f0; line-height:1.5; margin-bottom:12px;">"${r.text}"</p>
+                </div>
+                <div style="border-top:1px solid rgba(255,255,255,0.06); padding-top:8px;">
+                  <strong style="color:var(--primary, #00f0ff); font-size:13px;">${r.author}</strong>
+                  <p style="font-size:11px; color:var(--text-muted);">${r.project} • ${r.date || ''}</p>
+                </div>
+              </div>
+            `).join('');
+          } catch (e) {
+            console.warn(e);
+          }
+        }
+
+        if (form) {
+          form.onsubmit = async (e) => {
+            e.preventDefault();
+            const author = document.getElementById('revName').value.trim();
+            const project = document.getElementById('revProject').value.trim();
+            const rating = Number(document.getElementById('revRating').value);
+            const text = document.getElementById('revText').value.trim();
+
+            const btn = document.getElementById('submitReviewBtn');
+            btn.disabled = true;
+            btn.textContent = 'Enviando...';
+
+            try {
+              const resp = await fetch('/api/testimonials', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'submit', author, project, rating, text, platform: 'Web' })
+              });
+              if (resp.ok) {
+                alert('¡Muchas gracias! Tu reseña ha sido enviada y se publicará tras la revisión de Zakhar.');
+                modal.style.display = 'none';
+                form.reset();
+              } else {
+                throw new Error('Error al enviar');
+              }
+            } catch (err) {
+              alert('Error al enviar reseña: ' + err.message);
+            } finally {
+              btn.disabled = false;
+              btn.textContent = 'Enviar Reseña';
+            }
+          };
+        }
+
+        loadPublicReviews();
+      });
+    </script>
+
 
     <!-- ===== LINKS ===== -->
     <div class="LINKS">
@@ -287,7 +497,7 @@
     <div class="FOOTER">
       <h4>© 2026 Zakhar Oleksenko Shapoval. Todos los derechos reservados.</h4>
       <p>Diseñado por Zakhar Oleksenko Shapoval</p>
-      <p class="email"><a href="mailto:contacto@zakerii.com">contacto@zakerii.com</a></p>
+      <p class="email"><a href="mailto:pr.zakerii@gmail.com">pr.zakerii@gmail.com</a></p>
     </div>
 
   </div>

@@ -1,0 +1,23 @@
+# Cache rules for Zakerii Cloudflare Pages
+
+/admin*
+  Cache-Control: no-cache, no-store, must-revalidate
+  X-Robots-Tag: noindex, nofollow
+
+/admin.html
+  Cache-Control: no-cache, no-store, must-revalidate
+  X-Robots-Tag: noindex, nofollow
+
+/api/*
+  Cache-Control: no-cache, no-store, must-revalidate
+  Access-Control-Allow-Origin: *
+
+/api/media/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+/trabajos.html
+  Cache-Control: no-cache, must-revalidate
+
+/home.html
+  Cache-Control: no-cache, must-revalidate

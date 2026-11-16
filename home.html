@@ -93,22 +93,22 @@
         <div class="slider" id="slider">
           <ul class="slides">
             <li class="slide" id="slide1">
-              <img src="Imaganes/Incubadora.png" alt="Incubadora">
+              <img src="Imaganes/Giro_Personaje_360_Behance.gif" alt="Giro de Personaje 360°" title="Giro de Personaje 360° — Animación 2D Krita">
             </li>
             <li class="slide" id="slide2">
-              <img src="Imaganes/ZAKHAR_O.S_PROCEDURALES_0.png" alt="Texturado Procedural Madera">
+              <img src="Imaganes/Animacion_Pelota_Krita.gif" alt="Rebote de Pelota" title="Rebote de Pelota — Física 2D">
             </li>
             <li class="slide" id="slide3">
-              <img src="Imaganes/HOJA DE GIRO.png" alt="Concept Art">
+              <img src="Imaganes/Morphing_Krita.gif" alt="Morphing 2D" title="Morphing 2D — Animación Frame a Frame">
             </li>
             <li class="slide" id="slide4">
-              <img src="Imaganes/Renderfuego.jpg" alt="renderSubstance painter  ">
+              <img src="Imaganes/Hoja_Creacion_Personaje.jpg" alt="Hoja de Creación de Personaje" title="Diseño y Escala de Personajes">
             </li>
             <li class="slide" id="slide5">
-              <img src="Imaganes/Con HDRI.jpg" alt="Escena 3D con iluminación HDRI">
+              <img src="Imaganes/ZAKHAR_O.S_PROCEDURALES_0.png" alt="Texturado Procedural Madera" title="Texturas Procedurales Advanced">
             </li>
             <li class="slide" id="slide6">
-              <img src="Imaganes/CON PC.png" alt="Workstation & Setup 3D">
+              <img src="Imaganes/Escenario.png" alt="Render Escenario 3D" title="Composición 3D Blender Cycles">
             </li>
           </ul>
           <ul class="slider-controler"></ul>
@@ -198,19 +198,53 @@
     <div class="FOOTER">
       <h4>© 2026 Zakhar Oleksenko Shapoval. Todos los derechos reservados.</h4>
       <p>Diseñado por Zakhar Oleksenko Shapoval</p>
-      <p class="email"><a href="mailto:contacto@zakerii.com">contacto@zakerii.com</a></p>
+      <p class="email"><a href="mailto:pr.zakerii@gmail.com">pr.zakerii@gmail.com</a></p>
     </div>
 
   </div>
 
-  <!-- Initialize Carousel -->
+  <!-- Initialize Carousel with Live Cloudflare KV sync -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      if (window.initCarousel) {
+    document.addEventListener('DOMContentLoaded', async () => {
+      const slider = document.getElementById('slider');
+      if (!slider) return;
+
+      try {
+        const resp = await fetch('/api/works');
+        if (resp.ok) {
+          const works = await resp.json();
+          if (Array.isArray(works) && works.length > 0) {
+            // Keep all works that are visible and marked for carousel (no arbitrary limit)
+            const carouselWorks = works.filter(w => w.visible !== false && w.featuredInCarousel !== false);
+            if (carouselWorks.length > 0) {
+              const slidesUl = slider.querySelector('.slides');
+              if (slidesUl) {
+                slidesUl.innerHTML = carouselWorks.map((w, idx) => {
+                  const mediaSrc = (w.fileName.startsWith('http') || w.fileName.startsWith('/')) ? w.fileName : `Imaganes/${w.fileName}`;
+                  const isVideo = w.fileName.endsWith('.mp4') || w.fileName.endsWith('.webm');
+                  return `
+                    <li class="slide" id="slide${idx + 1}">
+                      ${isVideo 
+                        ? `<video src="${mediaSrc}" autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover;"></video>`
+                        : `<img src="${mediaSrc}" alt="${w.title}" title="${w.title} — ${w.desc || ''}">`}
+                    </li>
+                  `;
+                }).join('');
+              }
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Carousel sync error, using static fallback:', e);
+      }
+
+      // Initialize ModernCarousel ONCE after slides are populated!
+      if (typeof window.initCarousel === 'function') {
         window.initCarousel('slider');
       }
     });
   </script>
+
 </body>
 
 </html>
