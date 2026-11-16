@@ -837,68 +837,94 @@
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:12px; flex-wrap:wrap; gap:10px;">
             <div>
               <h3 style="font-size: 18px; color: #fff; font-weight: 700; display:flex; align-items:center; gap:8px;">
-                <span>🎬</span> AI Студия Сценариев & Контент-Пайплайн
+                <span>🎬</span> AI-Панель Контроля Канала (Gemini + Google Search + ElevenLabs)
               </h3>
               <p style="font-size: 13px; color: var(--admin-muted); margin-top: 4px;">
-                Генерация A/B заголовков, концептов превью и пошаговых сценариев через Google Gemini API для твоих 4 каналов
+                Поиск трендов в реальном интернете ➔ Сценарий по секциям ➔ Озвучка ElevenLabs ➔ Инфографика 1080p ➔ Таймлайн DaVinci (.fcpxml)
               </p>
             </div>
-            <div style="display:flex; gap:8px; align-items:center;">
-              <span id="geminiKeyStatus" style="font-size:12px; padding:4px 10px; border-radius:6px; background:rgba(239,68,68,0.2); color:#fca5a5;">API ключ не настроен</span>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <span id="geminiKeyStatus" style="font-size:12px; padding:4px 10px; border-radius:6px; background:rgba(239,68,68,0.2); color:#fca5a5;">API не настроены</span>
               <button onclick="toggleGeminiKeyModal()" class="btn-header" style="background:rgba(139,92,246,0.2); border:1px solid #8b5cf6; color:#c4b5fd; font-size:12px; padding:6px 12px; border-radius:8px; cursor:pointer;">
-                🔑 Настроить Gemini Key
+                🔑 Ключи (Gemini / ElevenLabs)
               </button>
             </div>
           </div>
 
-          <!-- Studio Form -->
-          <div class="grid-2" style="margin-bottom:20px;">
+          <!-- STEP 1: INTERNET TREND RADAR -->
+          <div style="background:rgba(6, 182, 212, 0.06); border:1px solid rgba(6, 182, 212, 0.25); border-radius:14px; padding:16px; margin-bottom:20px;">
+            <div style="font-size:14px; font-weight:700; color:#67e8f9; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
+              <span>🌐</span> Шаг 1. Поиск актуальных тем в интернете (Google Search + Gemini)
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <input type="text" id="aiNicheInput" class="admin-input" value="video game industry failures, cancelled games, unreal engine drama, AI tech news" placeholder="Ниша или ключевые слова для поиска свежих новостей..." style="flex:1; min-width:240px;">
+              <button id="findTrendsBtn" onclick="runTrendSearch()" style="background:linear-gradient(135deg, #06b6d4, #3b82f6); color:#fff; border:none; padding:10px 18px; border-radius:10px; font-weight:700; cursor:pointer; font-size:13px;">
+                🔍 Найти горячие темы
+              </button>
+            </div>
+            <div id="trendsLoading" style="display:none; font-size:12px; color:#67e8f9; margin-top:10px;">⏳ Ищу актуальные события в Google Search через Gemini...</div>
+            <div id="trendsContainer" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:10px; margin-top:12px;"></div>
+          </div>
+
+          <!-- STEP 2: SCRIPT & PIPELINE GENERATOR -->
+          <div class="grid-2" style="margin-bottom:16px;">
             <div>
-              <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">1. Выбери YouTube Канал</label>
+              <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">Канал / Стиль</label>
               <select id="aiChannelSelect" class="form-input" style="width:100%; padding:10px; border-radius:10px; background:#111624; border:1px solid rgba(255,255,255,0.1); color:#fff;">
-                <option value="buildfailed">🔴 @BuildFailedYT (Лонгрид 10-15 мин, драма, геймдев, расследования)</option>
-                <option value="patchzero">⚡ @PatchZeroShorts (Шортс 50-60 сек, резкий хук, технические тайны)</option>
-                <option value="quiz">🧩 @Quiz4Family (Семейная викторина, 5 интерактивных вопросов)</option>
-                <option value="zakerii">🎮 Zakerii (Основной игровой / Майнкрафт / Обзоры)</option>
+                <option value="doc">🔴 Документальное расследование (8-12 мин, главы, инфографика, B-roll)</option>
+                <option value="shorts">⚡ Динамичный Shorts / Reels (50-60 сек, быстрый хук)</option>
+                <option value="quiz">🧩 Интерактивный квиз (@Quiz4Family)</option>
+                <option value="zakerii">🎮 Игровой / Обзор (Zakerii)</option>
               </select>
             </div>
 
             <div>
-              <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">2. Язык сценария</label>
+              <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">Язык озвучки</label>
               <select id="aiLangSelect" class="form-input" style="width:100%; padding:10px; border-radius:10px; background:#111624; border:1px solid rgba(255,255,255,0.1); color:#fff;">
-                <option value="en">English (US) — Рекомендуется для Build Failed & Patch Zero</option>
-                <option value="es">Spanish (ES) — Испанский дубляж / локализация</option>
-                <option value="ru">Russian (RU) — Для канала Zakerii / обзоров</option>
+                <option value="en">English (US)</option>
+                <option value="es">Spanish (ES)</option>
+                <option value="ru">Russian (RU)</option>
               </select>
             </div>
           </div>
 
-          <div style="margin-bottom:20px;">
-            <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">3. Тема ролика или краткая идея</label>
-            <textarea id="aiTopicInput" class="form-input" rows="3" placeholder="Например: Почему отменили амбициозный проект Star Wars 1313, и как Лукасфильм похоронил самую ожидаемую игру..." style="width:100%; padding:12px; border-radius:10px; background:#111624; border:1px solid rgba(255,255,255,0.1); color:#fff; font-family:inherit; font-size:14px;"></textarea>
+          <div style="margin-bottom:16px;">
+            <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">Тема ролика (выберите выше или введите свою)</label>
+            <textarea id="aiTopicInput" class="form-input" rows="2" placeholder="Например: Почему провалился запуск новой игры / секретная технология..." style="width:100%; padding:12px; border-radius:10px; background:#111624; border:1px solid rgba(255,255,255,0.1); color:#fff; font-family:inherit; font-size:14px;"></textarea>
           </div>
 
-          <div style="display:flex; gap:12px; align-items:center; margin-bottom:24px;">
+          <div style="display:flex; gap:12px; align-items:center; margin-bottom:24px; flex-wrap:wrap;">
             <button id="generateScriptBtn" onclick="runAiScriptGenerator()" style="background:linear-gradient(135deg, #8b5cf6, #06b6d4); color:#fff; border:none; padding:12px 24px; border-radius:10px; font-weight:700; cursor:pointer; font-size:14px; display:inline-flex; align-items:center; gap:8px;">
-              <span>✨</span> Сгенерировать сценарий & Превью
+              <span>✨</span> Шаг 2. Сгенерировать Сценарий + Секции + Инфографику
             </button>
-            <span id="aiLoadingSpinner" style="display:none; color:var(--admin-muted); font-size:13px;">⏳ Gemini обдумывает драматургию и структуру...</span>
+            <span id="aiLoadingSpinner" style="display:none; color:var(--admin-muted); font-size:13px;">⏳ Gemini разбивает сценарий на секции для ElevenLabs и DaVinci...</span>
           </div>
 
-          <!-- Generated Output Box -->
+          <!-- STEP 3: INTERACTIVE PIPELINE WORKSPACE -->
           <div id="aiResultBox" style="display:none; border-top:1px solid rgba(255,255,255,0.1); padding-top:20px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
-              <h4 style="font-size:16px; color:#fff; font-weight:700;">Результат генерации:</h4>
-              <div style="display:flex; gap:8px;">
-                <button onclick="copyGeneratedText()" class="btn-header" style="background:rgba(255,255,255,0.08); color:#fff; font-size:12px; padding:6px 14px; border-radius:8px;">
-                  📋 Скопировать весь текст
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+              <div>
+                <h4 id="pipelineTitle" style="font-size:17px; color:#fff; font-weight:700;">Проект готов</h4>
+                <div id="pipelineMeta" style="font-size:12px; color:#94a3b8; margin-top:4px;"></div>
+              </div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button onclick="voiceAllSections()" class="btn-header" style="background:rgba(168,85,247,0.2); border:1px solid #a855f7; color:#e9d5ff; font-size:12px; padding:7px 14px; border-radius:8px;">
+                  🎙️ Озвучить все (ElevenLabs)
                 </button>
-                <button onclick="sendToLocalWebhook()" class="btn-header" style="background:rgba(16,185,129,0.2); border:1px solid #10b981; color:#a7f3d0; font-size:12px; padding:6px 14px; border-radius:8px;">
-                  🚀 Отправить в локальную студию (Webhook)
+                <button onclick="downloadDaVinciFCPXML()" class="btn-header" style="background:rgba(59,130,246,0.2); border:1px solid #3b82f6; color:#bfdbfe; font-size:12px; padding:7px 14px; border-radius:8px;">
+                  🎬 Скачать DaVinci (.fcpxml)
+                </button>
+                <button onclick="downloadProgramFailedTxt()" class="btn-header" style="background:rgba(245,158,11,0.2); border:1px solid #f59e0b; color:#fde68a; font-size:12px; padding:7px 14px; border-radius:8px;">
+                  💾 Экспорт .txt (ProgramFailed)
+                </button>
+                <button onclick="sendToLocalWebhook()" class="btn-header" style="background:rgba(16,185,129,0.2); border:1px solid #10b981; color:#a7f3d0; font-size:12px; padding:7px 14px; border-radius:8px;">
+                  🚀 В локальный ПК (yt-dlp + музыка)
                 </button>
               </div>
             </div>
-            <div id="aiOutputContent" style="background:#090d16; border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:20px; font-family:'Courier New', monospace; font-size:13px; line-height:1.6; color:#e2e8f0; white-space:pre-wrap; max-height:550px; overflow-y:auto;"></div>
+
+            <!-- Sections List -->
+            <div id="aiSectionsContainer" style="display:flex; flex-direction:column; gap:14px;"></div>
           </div>
         </div>
       </div>
@@ -1094,24 +1120,32 @@
     </div>
   </div>
 
-  <!-- Modal Gemini Key -->
+  <!-- Modal API Keys -->
   <div id="geminiKeyModal" class="admin-modal-backdrop">
     <div class="admin-modal-box" style="max-width:480px;">
       <div class="modal-header">
-        <h4 class="modal-title"><span>🔑</span> Google Gemini API Key</h4>
+        <h4 class="modal-title"><span>🔑</span> Настройки API Студии</h4>
         <button onclick="toggleGeminiKeyModal()" class="modal-close">&times;</button>
       </div>
       <div style="padding:16px 0;">
-        <p style="font-size:13px; color:var(--admin-muted); margin-bottom:14px; line-height:1.5;">
-          Ключ хранится локально в твоем браузере (localStorage) и не передается третьим лицам. Используется для генерации сценариев и превью для твоих каналов.
+        <p style="font-size:12px; color:var(--admin-muted); margin-bottom:14px; line-height:1.5;">
+          Ключи хранятся локально в твоем браузере (localStorage) и используются напрямую для Gemini + ElevenLabs.
         </p>
         <div class="admin-form-group">
-          <label for="geminiKeyInput">API Key (из Google AI Studio):</label>
+          <label for="geminiKeyInput">Google Gemini API Key:</label>
           <input type="password" id="geminiKeyInput" class="admin-input" placeholder="AIzaSy...">
+        </div>
+        <div class="admin-form-group">
+          <label for="elevenKeyInput">ElevenLabs API Key:</label>
+          <input type="password" id="elevenKeyInput" class="admin-input" placeholder="sk_...">
+        </div>
+        <div class="admin-form-group">
+          <label for="elevenVoiceInput">ElevenLabs Voice ID:</label>
+          <input type="text" id="elevenVoiceInput" class="admin-input" placeholder="8MhCWEuHC2ZUfOxpeUvH">
         </div>
         <div class="btn-group-row">
           <button type="button" onclick="toggleGeminiKeyModal()" class="btn-admin btn-secondary">Отмена</button>
-          <button type="button" onclick="saveGeminiKey()" class="btn-admin">Сохранить ключ</button>
+          <button type="button" onclick="saveGeminiKey()" class="btn-admin">Сохранить ключи</button>
         </div>
       </div>
     </div>
@@ -2350,17 +2384,25 @@ Zakhar (Zakerii)`;
         }
       });
 
-      // 13. AI STUDIO & SCRIPT GENERATOR
+      // 13. AI STUDIO & SEMI-AUTO CHANNEL PIPELINE
+      let currentPipelineProject = null;
+      let sectionAudioData = {}; // idx -> { blobUrl, duration }
+
       function updateGeminiKeyBadge() {
-        const key = localStorage.getItem('gemini_api_key');
+        const gKey = localStorage.getItem('gemini_api_key');
+        const eKey = localStorage.getItem('elevenlabs_api_key');
         const badge = document.getElementById('geminiKeyStatus');
         if (!badge) return;
-        if (key && key.trim().length > 10) {
-          badge.textContent = '✓ Gemini API подключен';
+        if (gKey && eKey) {
+          badge.textContent = '✓ Gemini + ElevenLabs готовы';
           badge.style.background = 'rgba(16, 185, 129, 0.2)';
           badge.style.color = '#a7f3d0';
+        } else if (gKey) {
+          badge.textContent = '✓ Gemini готов (добавь ElevenLabs)';
+          badge.style.background = 'rgba(245, 158, 11, 0.2)';
+          badge.style.color = '#fde68a';
         } else {
-          badge.textContent = 'API ключ не настроен';
+          badge.textContent = 'API ключи не настроены';
           badge.style.background = 'rgba(239, 68, 68, 0.2)';
           badge.style.color = '#fca5a5';
         }
@@ -2372,76 +2414,121 @@ Zakhar (Zakerii)`;
         modal.style.display = isShown ? 'none' : 'flex';
         if (!isShown) {
           document.getElementById('geminiKeyInput').value = localStorage.getItem('gemini_api_key') || '';
+          document.getElementById('elevenKeyInput').value = localStorage.getItem('elevenlabs_api_key') || '';
+          document.getElementById('elevenVoiceInput').value = localStorage.getItem('elevenlabs_voice_id') || '8MhCWEuHC2ZUfOxpeUvH';
         }
       };
 
       window.saveGeminiKey = () => {
-        const key = document.getElementById('geminiKeyInput').value.trim();
-        if (!key) {
-          localStorage.removeItem('gemini_api_key');
-        } else {
-          localStorage.setItem('gemini_api_key', key);
-        }
+        const gKey = document.getElementById('geminiKeyInput').value.trim();
+        const eKey = document.getElementById('elevenKeyInput').value.trim();
+        const vId = document.getElementById('elevenVoiceInput').value.trim() || '8MhCWEuHC2ZUfOxpeUvH';
+
+        if (gKey) localStorage.setItem('gemini_api_key', gKey); else localStorage.removeItem('gemini_api_key');
+        if (eKey) localStorage.setItem('elevenlabs_api_key', eKey); else localStorage.removeItem('elevenlabs_api_key');
+        localStorage.setItem('elevenlabs_voice_id', vId);
+
         updateGeminiKeyBadge();
         toggleGeminiKeyModal();
-        alert('✓ Ключ Gemini API сохранен!');
+        alert('✓ Настройки API сохранены!');
       };
 
+      // Step 1: Search live trends using Gemini + Google Search Grounding
+      window.runTrendSearch = async () => {
+        const apiKey = localStorage.getItem('gemini_api_key');
+        if (!apiKey) { alert('Сначала укажи Gemini API Key!'); toggleGeminiKeyModal(); return; }
+
+        const niche = document.getElementById('aiNicheInput').value.trim();
+        const loader = document.getElementById('trendsLoading');
+        const container = document.getElementById('trendsContainer');
+        const btn = document.getElementById('findTrendsBtn');
+
+        btn.disabled = true;
+        loader.style.display = 'block';
+        container.innerHTML = '';
+
+        const prompt = `Search the web for the 5 most interesting, viral, recent news or controversies in: "${niche}".
+Return ONLY a raw JSON array (no markdown fences) of 5 objects with keys:
+"title" (catchy YouTube angle), "summary" (2 sentences why it matters), "hook" (1-sentence opening hook).`;
+
+        try {
+          const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              tools: [{ google_search: {} }]
+            })
+          });
+
+          const data = await resp.json();
+          if (!resp.ok) throw new Error(data.error?.message || 'Ошибка поиска трендов');
+
+          let raw = data.candidates?.[0]?.content?.parts?.map(p => p.text || '').join('\n') || '[]';
+          raw = raw.replace(/```json/gi, '').replace(/```/g, '').trim();
+          const startIdx = raw.indexOf('[');
+          const endIdx = raw.lastIndexOf(']');
+          const topics = JSON.parse(startIdx !== -1 ? raw.slice(startIdx, endIdx + 1) : raw);
+
+          container.innerHTML = topics.map((t, i) => `
+            <div style="background:#111624; border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:14px; display:flex; flex-direction:column; justify-content:space-between; gap:10px;">
+              <div>
+                <div style="font-size:13px; font-weight:700; color:#fff; margin-bottom:6px;">${t.title}</div>
+                <div style="font-size:12px; color:#94a3b8; line-height:1.4;">${t.summary}</div>
+              </div>
+              <button onclick="selectTrendTopic(${i})" data-topic="${encodeURIComponent(t.title + ' — ' + t.summary)}" class="btn-header" style="background:rgba(6,182,212,0.15); border:1px solid #06b6d4; color:#67e8f9; font-size:11px; padding:6px 10px; border-radius:8px; width:100%;">
+                ✅ Выбрать эту тему
+              </button>
+            </div>
+          `).join('');
+        } catch (err) {
+          alert('Ошибка поиска трендов: ' + err.message);
+        } finally {
+          btn.disabled = false;
+          loader.style.display = 'none';
+        }
+      };
+
+      window.selectTrendTopic = (idx) => {
+        const btns = document.querySelectorAll('[data-topic]');
+        if (btns[idx]) {
+          document.getElementById('aiTopicInput').value = decodeURIComponent(btns[idx].getAttribute('data-topic'));
+          document.getElementById('aiTopicInput').focus();
+        }
+      };
+
+      // Step 2: Generate Structured JSON Pipeline (Script + Video Queries + Infographics)
       window.runAiScriptGenerator = async () => {
         const apiKey = localStorage.getItem('gemini_api_key');
-        if (!apiKey) {
-          alert('Сначала укажи свой Google Gemini API ключ в настройках (кнопка "Настроить Gemini Key")!');
-          toggleGeminiKeyModal();
-          return;
-        }
+        if (!apiKey) { alert('Сначала укажи Google Gemini API Key!'); toggleGeminiKeyModal(); return; }
 
         const channel = document.getElementById('aiChannelSelect').value;
         const lang = document.getElementById('aiLangSelect').value;
         const topic = document.getElementById('aiTopicInput').value.trim();
-
-        if (!topic) {
-          alert('Пожалуйста, введи тему или идею ролика!');
-          return;
-        }
+        if (!topic) { alert('Введи или выбери тему ролика!'); return; }
 
         const btn = document.getElementById('generateScriptBtn');
         const spinner = document.getElementById('aiLoadingSpinner');
         btn.disabled = true;
         spinner.style.display = 'inline';
 
-        let channelGuidelines = '';
-        if (channel === 'buildfailed') {
-          channelGuidelines = 'Формат: Длинное документальное расследование (10-15 мин). Стиль: мрачный, кинематографичный, глубокий анализ геймдева и технологий. Разбей сценарий на: 1) Вирусный хук (0:00-0:45), 2) Завязка драмы, 3) Разбор технических и управленческих ошибок, 4) Кульминация и последствия, 5) Вывод и вопрос аудитории. Включай пометки музыки [Dark Ambient, Suspense Synth] и видеоряда [V1: B-roll, 3D render].';
-        } else if (channel === 'patchzero') {
-          channelGuidelines = 'Формат: YouTube Shorts (50-60 секунд). Стиль: взрывной темп, никаких предисловий, мгновенный шокирующий хук в первые 2 секунды. Смена кадра каждые 2-3 секунды. Включай пометки SFX [Whoosh, Glitch, Impact].';
-        } else if (channel === 'quiz') {
-          channelGuidelines = 'Формат: Семейная интерактивная викторина (@Quiz4Family). Сделай 5 увлекательных вопросов с 4 вариантами ответов (A, B, C, D), указанием правильного ответа и коротким захватывающим фактом-объяснением.';
-        } else {
-          channelGuidelines = 'Формат: Игровой канал Zakerii. Обзор, аналитика или креативный геймплей. Динамичный, живой, с юмором и погружением в детали.';
-        }
-
-        const promptText = `Ты — ведущий сценарист и креативный продюсер YouTube-экосистемы каналов.
-Канал: ${channel}.
-Язык результата: ${lang === 'en' ? 'English' : lang === 'es' ? 'Spanish' : 'Russian'}.
-Тема видео: "${topic}".
-Руководство по каналу: ${channelGuidelines}
-
-Выдай результат строго в следующей структуре:
-==================================================
-1. 🎯 A/B ЗАГОЛОВКИ (3 ВАРИАНТА С ВЫСОКИМ CTR):
-- Вариант 1 (Кликбейтный с интригой): ...
-- Вариант 2 (Через вопрос/шок): ...
-- Вариант 3 (Драматичный/Утвердительный): ...
-
-2. 🖼️ КОНЦЕПТЫ ДЛЯ ОБЛОЖКИ (THUMBNAIL PROMPTS ДЛЯ MIDJOURNEY / CANVA):
-- Концепт 1: ...
-- Концепт 2: ...
-- Концепт 3: ...
-
-3. 🎬 ПОЛНЫЙ СЦЕНАРИЙ С ТАЙМКОДАМИ, ВИЗУАЛОМ И ГОЛОСОМ:
-(Используй блоки:
-[ВРЕМЯ] [ВИЗУАЛЬНЫЙ РЯД / B-ROLL / 3D] [ГОЛОС ДИКТОРА] [МУЗЫКА И SFX])
-==================================================`;
+        const promptText = `You are a YouTube producer. Create a complete structured production pipeline in ${lang === 'en' ? 'English' : lang === 'es' ? 'Spanish' : 'Russian'} for style "${channel}" on topic: "${topic}".
+Return ONLY a raw JSON object (no markdown fences) with this exact schema:
+{
+  "title": "Main viral YouTube title",
+  "thumbnail": { "line1": "SHORT 2 WORDS", "line2": "HOOK 2 WORDS", "badge": "FAILED", "accent_color": "#ff2020", "concept": "visual description" },
+  "music_mood": "Dark Ambient / Cyberpunk / Synth",
+  "sections": [
+    {
+      "id": "01_Hook",
+      "header": "Cold Open",
+      "spoken_text": "Clean spoken narration text without brackets or stage directions, ready for ElevenLabs TTS.",
+      "video_query": "exact YouTube trailer or royalty-free stock search query for this section",
+      "infographic": { "title": "Stat Title", "stat_value": "$150M", "stat_label": "Budget Lost / Comparison", "subtext": "Short context line" }
+    }
+  ]
+}
+Include 4 to 6 sections (Cold Open, Context, The Turning Point, The Collapse, Closing). Keep infographic null if a section doesn't need data, and include infographic on at least 2 sections.`;
 
         try {
           const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`, {
@@ -2452,18 +2539,17 @@ Zakhar (Zakerii)`;
             })
           });
 
-          if (!resp.ok) {
-            const errData = await resp.json();
-            throw new Error(errData.error?.message || 'Ошибка API');
-          }
-
           const data = await resp.json();
-          const generatedText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Пустой ответ модели';
+          if (!resp.ok) throw new Error(data.error?.message || 'Ошибка API');
 
-          document.getElementById('aiResultBox').style.display = 'block';
-          document.getElementById('aiOutputContent').textContent = generatedText;
-          document.getElementById('aiResultBox').scrollIntoView({ behavior: 'smooth' });
+          let raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+          raw = raw.replace(/```json/gi, '').replace(/```/g, '').trim();
+          const s = raw.indexOf('{');
+          const e = raw.lastIndexOf('}');
+          currentPipelineProject = JSON.parse(s !== -1 ? raw.slice(s, e + 1) : raw);
+          sectionAudioData = {};
 
+          renderPipelineSections();
         } catch (err) {
           alert('Ошибка генерации: ' + err.message);
         } finally {
@@ -2472,35 +2558,249 @@ Zakhar (Zakerii)`;
         }
       };
 
-      window.copyGeneratedText = () => {
-        const text = document.getElementById('aiOutputContent').textContent;
-        navigator.clipboard.writeText(text).then(() => {
-          alert('✓ Полный сценарий скопирован в буфер обмена!');
+      function renderPipelineSections() {
+        const proj = currentPipelineProject;
+        if (!proj) return;
+
+        document.getElementById('aiResultBox').style.display = 'block';
+        document.getElementById('pipelineTitle').textContent = proj.title || 'Без названия';
+        document.getElementById('pipelineMeta').textContent = `🎵 Музыка: ${proj.music_mood || 'Dark Ambient'} • 🖼️ Обложка: [${proj.thumbnail?.line1} / ${proj.thumbnail?.line2}] • Секций: ${proj.sections?.length || 0}`;
+
+        const container = document.getElementById('aiSectionsContainer');
+        container.innerHTML = (proj.sections || []).map((sec, i) => `
+          <div style="background:#0d121f; border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+              <span style="font-weight:700; color:#38bdf8; font-size:14px;">${sec.id} — ${sec.header}</span>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(sec.video_query || '')}" target="_blank" class="btn-header" style="background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.4); color:#fca5a5; font-size:11px; padding:4px 10px; border-radius:6px; text-decoration:none;">
+                  ▶️ YouTube B-Roll: "${sec.video_query}"
+                </a>
+                <a href="https://www.pexels.com/search/videos/${encodeURIComponent(sec.video_query || '')}/" target="_blank" class="btn-header" style="background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.4); color:#a7f3d0; font-size:11px; padding:4px 10px; border-radius:6px; text-decoration:none;">
+                  🎞️ Pexels (Без АП)
+                </a>
+                ${sec.infographic ? `
+                  <button onclick="downloadInfographic(${i})" class="btn-header" style="background:rgba(245,158,11,0.18); border:1px solid #f59e0b; color:#fde68a; font-size:11px; padding:4px 10px; border-radius:6px;">
+                    📊 Скачать инфографику (1080p PNG)
+                  </button>
+                ` : ''}
+                <button id="voiceBtn_${i}" onclick="voiceSingleSection(${i})" class="btn-header" style="background:rgba(168,85,247,0.2); border:1px solid #a855f7; color:#e9d5ff; font-size:11px; padding:4px 10px; border-radius:6px;">
+                  🎙️ Озвучить
+                </button>
+              </div>
+            </div>
+            <textarea id="secText_${i}" onchange="currentPipelineProject.sections[${i}].spoken_text = this.value" style="width:100%; background:#070a12; border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px; color:#e2e8f0; font-size:13px; line-height:1.5; min-height:72px; font-family:inherit;">${sec.spoken_text}</textarea>
+            <div id="audioBox_${i}" style="margin-top:8px;"></div>
+          </div>
+        `).join('');
+
+        document.getElementById('aiResultBox').scrollIntoView({ behavior: 'smooth' });
+      }
+
+      // Step 3: ElevenLabs Direct TTS per section
+      window.voiceSingleSection = async (i) => {
+        const eKey = localStorage.getItem('elevenlabs_api_key');
+        const vId = localStorage.getItem('elevenlabs_voice_id') || '8MhCWEuHC2ZUfOxpeUvH';
+        if (!eKey) { alert('Укажи ElevenLabs API Key в настройках (кнопка "🔑 Ключи")!'); toggleGeminiKeyModal(); return; }
+
+        const text = document.getElementById(`secText_${i}`).value.trim();
+        const btn = document.getElementById(`voiceBtn_${i}`);
+        const box = document.getElementById(`audioBox_${i}`);
+        btn.disabled = true;
+        btn.textContent = '⏳ Озвучка...';
+
+        try {
+          const resp = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${vId}`, {
+            method: 'POST',
+            headers: {
+              'xi-api-key': eKey,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              text: text,
+              model_id: 'eleven_multilingual_v2',
+              voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+            })
+          });
+
+          if (!resp.ok) {
+            const err = await resp.json().catch(() => ({}));
+            throw new Error(err.detail?.message || `HTTP ${resp.status}`);
+          }
+
+          const blob = await resp.blob();
+          const url = URL.createObjectURL(blob);
+
+          // Measure audio duration for FCPXML timeline
+          const audio = new Audio(url);
+          await new Promise(resolve => {
+            audio.onloadedmetadata = () => resolve();
+            audio.onerror = () => resolve();
+          });
+          const dur = audio.duration && isFinite(audio.duration) ? audio.duration : 10;
+          const secId = currentPipelineProject.sections[i].id || `sec_${i}`;
+          sectionAudioData[i] = { url, duration: dur, filename: `${secId}.mp3` };
+
+          box.innerHTML = `
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+              <audio controls src="${url}" style="height:34px; flex:1; min-width:220px;"></audio>
+              <a href="${url}" download="${secId}.mp3" class="btn-header" style="background:#10b981; color:#000; font-weight:700; font-size:11px; padding:6px 12px; border-radius:8px; text-decoration:none;">
+                ⬇️ ${secId}.mp3 (${dur.toFixed(1)}s)
+              </a>
+            </div>
+          `;
+          btn.textContent = '✓ Озвучено';
+        } catch (err) {
+          alert('Ошибка ElevenLabs: ' + err.message);
+          btn.textContent = '🎙️ Повторить';
+        } finally {
+          btn.disabled = false;
+        }
+      };
+
+      window.voiceAllSections = async () => {
+        if (!currentPipelineProject?.sections) return;
+        for (let i = 0; i < currentPipelineProject.sections.length; i++) {
+          await voiceSingleSection(i);
+        }
+        alert('✓ Все секции озвучены! Теперь можно скачать таймлайн DaVinci (.fcpxml).');
+      };
+
+      // Infographic 1920x1080 PNG Renderer
+      window.downloadInfographic = (i) => {
+        const info = currentPipelineProject.sections[i]?.infographic;
+        if (!info) return;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = 1920;
+        canvas.height = 1080;
+        const ctx = canvas.getContext('2d');
+
+        // Dark cinematic background
+        const grad = ctx.createRadialGradient(960, 540, 100, 960, 540, 1100);
+        grad.addColorStop(0, '#161f33');
+        grad.addColorStop(1, '#070a11');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 1920, 1080);
+
+        // Subtle grid
+        ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+        ctx.lineWidth = 2;
+        for (let x = 0; x < 1920; x += 80) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 1080); ctx.stroke(); }
+        for (let y = 0; y < 1080; y += 80) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(1920, y); ctx.stroke(); }
+
+        // Card container
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+        ctx.strokeStyle = currentPipelineProject.thumbnail?.accent_color || '#06b6d4';
+        ctx.lineWidth = 5;
+        ctx.roundRect(260, 220, 1400, 640, 36);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = 'bold 42px Inter, Arial, sans-serif';
+        ctx.fillText((info.title || '').toUpperCase(), 960, 340);
+
+        ctx.fillStyle = currentPipelineProject.thumbnail?.accent_color || '#38bdf8';
+        ctx.font = '900 180px Inter, Arial, sans-serif';
+        ctx.fillText(info.stat_value || '', 960, 550);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 52px Inter, Arial, sans-serif';
+        ctx.fillText(info.stat_label || '', 960, 660);
+
+        ctx.fillStyle = '#64748b';
+        ctx.font = '34px Inter, Arial, sans-serif';
+        ctx.fillText(info.subtext || '', 960, 750);
+
+        const link = document.createElement('a');
+        link.download = `${currentPipelineProject.sections[i].id}_infographic.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      };
+
+      // Export DaVinci Resolve FCPXML Timeline
+      window.downloadDaVinciFCPXML = () => {
+        if (!currentPipelineProject?.sections) return;
+        let offset = 0;
+        let resources = '';
+        let spineClips = '';
+
+        currentPipelineProject.sections.forEach((sec, i) => {
+          const durSec = sectionAudioData[i]?.duration || Math.max(5, Math.ceil((sec.spoken_text || '').length / 14));
+          const durFrames = Math.round(durSec * 30);
+          const offsetFrames = Math.round(offset * 30);
+          const assetId = `r${i + 2}`;
+          const fileName = `${sec.id}.mp3`;
+
+          resources += `        <asset id="${assetId}" name="${fileName}" src="file://localhost/${fileName}" start="0s" duration="${durFrames}/30s" hasAudio="1" audioSources="1" audioChannels="2" audioRate="44100"/>\n`;
+          spineClips += `                        <gap name="${sec.id} (${sec.video_query})" offset="${offsetFrames}/30s" duration="${durFrames}/30s" start="0s">\n`;
+          spineClips += `                            <asset-clip ref="${assetId}" lane="-1" offset="0s" name="${fileName}" duration="${durFrames}/30s" start="0s"/>\n`;
+          spineClips += `                        </gap>\n`;
+
+          offset += durSec + 0.4;
         });
+
+        const totalFrames = Math.round(offset * 30);
+        const fcpxml = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.9">
+    <resources>
+        <format id="r1" name="FFVideoFormat1080p30" frameDuration="1/30s" width="1920" height="1080"/>
+${resources}    </resources>
+    <library>
+        <event name="Zakerii AI Studio">
+            <project name="${(currentPipelineProject.title || 'AI_Project').replace(/[<>&"]/g, '')}">
+                <sequence format="r1" duration="${totalFrames}/30s">
+                    <spine>
+${spineClips}                    </spine>
+                </sequence>
+            </project>
+        </event>
+    </library>
+</fcpxml>`;
+
+        const blob = new Blob([fcpxml], { type: 'application/xml' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `DaVinci_Timeline.fcpxml`;
+        a.click();
+      };
+
+      // Export ProgramFailed.py compatible .txt
+      window.downloadProgramFailedTxt = () => {
+        if (!currentPipelineProject) return;
+        const p = currentPipelineProject;
+        let txt = `Main title: ${p.title}\n`;
+        txt += `Thumbnail concept: ${p.thumbnail?.concept || ''}\n`;
+        txt += `LINE 1: ${p.thumbnail?.line1 || 'BUILD'}\n`;
+        txt += `LINE 2: ${p.thumbnail?.line2 || 'FAILED'}\n`;
+        txt += `Accent color: ${p.thumbnail?.accent_color || '#ff2020'}\n`;
+        txt += `Badge: ${p.thumbnail?.badge || 'FAILED'}\n\nScript\n\n`;
+        (p.sections || []).forEach(s => {
+          txt += `${s.header}\n${s.spoken_text}\n\n`;
+        });
+        const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `${(p.title || 'script').replace(/[^a-zA-Z0-9_-]/g, '_')}.txt`;
+        a.click();
       };
 
       window.sendToLocalWebhook = async () => {
-        const text = document.getElementById('aiOutputContent').textContent;
-        const channel = document.getElementById('aiChannelSelect').value;
-        const topic = document.getElementById('aiTopicInput').value;
-
-        const webhookUrl = prompt('Укажи URL локального вебхука студии (по умолчанию http://localhost:8080/api/queue):', 'http://localhost:8080/api/queue');
+        if (!currentPipelineProject) return;
+        const webhookUrl = prompt('URL локального сервера (для yt-dlp + музыки + DaVinci сборки):', 'http://localhost:8080/api/queue');
         if (!webhookUrl) return;
 
         try {
-          const res = await fetch(webhookUrl, {
+          await fetch(webhookUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              channel: channel,
-              topic: topic,
-              script: text,
-              created_at: new Date().toISOString()
-            })
+            body: JSON.stringify(currentPipelineProject)
           });
-          alert('✓ Успешно отправлено в локальную студию!');
+          alert('✓ Весь проект отправлен на локальный компьютер!');
         } catch (e) {
-          alert('Не удалось подключиться к локальному вебхуку (убедись, что локальный сервер запущен): ' + e.message);
+          alert('Локальный сервер не отвечает (убедись, что он запущен на ПК): ' + e.message);
         }
       };
 
