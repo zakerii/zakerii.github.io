@@ -1136,6 +1136,10 @@
           <input type="password" id="geminiKeyInput" class="admin-input" placeholder="AIzaSy...">
         </div>
         <div class="admin-form-group">
+          <label for="openaiKeyInput">OpenAI API Key (запасной, если у Gemini 0 квоты):</label>
+          <input type="password" id="openaiKeyInput" class="admin-input" placeholder="sk-proj-...">
+        </div>
+        <div class="admin-form-group">
           <label for="geminiModelSelect">Модель Gemini:</label>
           <select id="geminiModelSelect" class="admin-input">
             <option value="gemini-3.8-flash">gemini-3.8-flash (Новейшая)</option>
@@ -2398,15 +2402,17 @@ Zakhar (Zakerii)`;
 
       function updateGeminiKeyBadge() {
         const gKey = localStorage.getItem('gemini_api_key');
+        const oKey = localStorage.getItem('openai_api_key');
         const eKey = localStorage.getItem('elevenlabs_api_key');
         const badge = document.getElementById('geminiKeyStatus');
         if (!badge) return;
-        if (gKey && eKey) {
-          badge.textContent = '✓ Gemini + ElevenLabs готовы';
+        const hasAI = Boolean(gKey || oKey);
+        if (hasAI && eKey) {
+          badge.textContent = '✓ AI + ElevenLabs синхронизированы';
           badge.style.background = 'rgba(16, 185, 129, 0.2)';
           badge.style.color = '#a7f3d0';
-        } else if (gKey) {
-          badge.textContent = '✓ Gemini готов (добавь ElevenLabs)';
+        } else if (hasAI) {
+          badge.textContent = '✓ AI подключен (добавь ElevenLabs)';
           badge.style.background = 'rgba(245, 158, 11, 0.2)';
           badge.style.color = '#fde68a';
         } else {
@@ -2416,32 +2422,73 @@ Zakhar (Zakerii)`;
         }
       }
 
+      async function syncKeysFromCloud() {
+        const token = sessionStorage.getItem('zakerii_session_token');
+        if (!token) return;
+        try {
+          const res = await fetch('/api/keys', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'get', token })
+          });
+          if (!res.ok) return;
+          const data = await res.json();
+          const k = data.keys || {};
+          if (k.gemini_api_key) localStorage.setItem('gemini_api_key', k.gemini_api_key);
+          if (k.gemini_model) localStorage.setItem('gemini_model', k.gemini_model);
+          if (k.openai_api_key) localStorage.setItem('openai_api_key', k.openai_api_key);
+          if (k.elevenlabs_api_key) localStorage.setItem('elevenlabs_api_key', k.elevenlabs_api_key);
+          if (k.elevenlabs_voice_id) localStorage.setItem('elevenlabs_voice_id', k.elevenlabs_voice_id);
+          updateGeminiKeyBadge();
+        } catch (e) {}
+      }
+
       window.toggleGeminiKeyModal = () => {
         const modal = document.getElementById('geminiKeyModal');
         const isShown = modal.style.display === 'flex';
         modal.style.display = isShown ? 'none' : 'flex';
         if (!isShown) {
           document.getElementById('geminiKeyInput').value = localStorage.getItem('gemini_api_key') || '';
+          document.getElementById('openaiKeyInput').value = localStorage.getItem('openai_api_key') || '';
           document.getElementById('geminiModelSelect').value = localStorage.getItem('gemini_model') || 'gemini-3.8-flash';
           document.getElementById('elevenKeyInput').value = localStorage.getItem('elevenlabs_api_key') || '';
           document.getElementById('elevenVoiceInput').value = localStorage.getItem('elevenlabs_voice_id') || '8MhCWEuHC2ZUfOxpeUvH';
         }
       };
 
-      window.saveGeminiKey = () => {
+      window.saveGeminiKey = async () => {
         const gKey = document.getElementById('geminiKeyInput').value.trim();
+        const oKey = document.getElementById('openaiKeyInput').value.trim();
         const gModel = document.getElementById('geminiModelSelect').value;
         const eKey = document.getElementById('elevenKeyInput').value.trim();
         const vId = document.getElementById('elevenVoiceInput').value.trim() || '8MhCWEuHC2ZUfOxpeUvH';
 
         if (gKey) localStorage.setItem('gemini_api_key', gKey); else localStorage.removeItem('gemini_api_key');
+        if (oKey) localStorage.setItem('openai_api_key', oKey); else localStorage.removeItem('openai_api_key');
         localStorage.setItem('gemini_model', gModel);
         if (eKey) localStorage.setItem('elevenlabs_api_key', eKey); else localStorage.removeItem('elevenlabs_api_key');
         localStorage.setItem('elevenlabs_voice_id', vId);
 
+        const token = sessionStorage.getItem('zakerii_session_token');
+        if (token) {
+          await fetch('/api/keys', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              action: 'save',
+              token,
+              gemini_api_key: gKey,
+              gemini_model: gModel,
+              openai_api_key: oKey,
+              elevenlabs_api_key: eKey,
+              elevenlabs_voice_id: vId
+            })
+          }).catch(() => {});
+        }
+
         updateGeminiKeyBadge();
         toggleGeminiKeyModal();
-        alert('✓ Настройки API сохранены!');
+        alert('✓ Ключи сохранены в облаке (работают во всех браузерах)!');
       };
 
       function renderTrendCards(topics, sourceNote) {
@@ -2528,10 +2575,11 @@ Return ONLY a raw JSON array (no markdown fences) of 5 objects with keys:
         }
       };
 
-      // Step 2: Generate Structured JSON Pipeline (Script + Video Queries + Infographics)
+      // Step 2: Generate Structured JSON Pipeline (Gemini with auto-fallback to OpenAI)
       window.runAiScriptGenerator = async () => {
         const apiKey = localStorage.getItem('gemini_api_key');
-        if (!apiKey) { alert('Сначала укажи Google Gemini API Key!'); toggleGeminiKeyModal(); return; }
+        const openaiKey = localStorage.getItem('openai_api_key');
+        if (!apiKey && !openaiKey) { alert('Укажи Gemini API Key или OpenAI API Key в настройках!'); toggleGeminiKeyModal(); return; }
 
         const channel = document.getElementById('aiChannelSelect').value;
         const lang = document.getElementById('aiLangSelect').value;
@@ -2562,29 +2610,47 @@ Return ONLY a raw JSON object (no markdown fences) with this exact schema:
 Include 4 to 6 sections (Cold Open, Context, The Turning Point, The Collapse, Closing). Keep infographic null if a section doesn't need data, and include infographic on at least 2 sections.`;
 
         try {
-          const selectedModel = localStorage.getItem('gemini_model') || 'gemini-3.8-flash';
-          const modelsToTry = [selectedModel, 'gemini-2.5-flash-lite', 'gemini-2.0-flash'].filter((v, i, a) => a.indexOf(v) === i);
-          let data = null;
+          let raw = '';
           let lastErr = '';
 
-          for (const m of modelsToTry) {
-            const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${apiKey}`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                contents: [{ parts: [{ text: promptText }] }]
-              })
-            });
-            data = await resp.json();
-            if (resp.ok) break;
-            lastErr = data.error?.message || `HTTP ${resp.status}`;
-            if (resp.status !== 429 && !lastErr.toLowerCase().includes('quota')) {
-              throw new Error(lastErr);
+          if (apiKey) {
+            const selectedModel = localStorage.getItem('gemini_model') || 'gemini-3.8-flash';
+            const modelsToTry = [selectedModel, 'gemini-2.5-flash-lite', 'gemini-2.0-flash'].filter((v, i, a) => a.indexOf(v) === i);
+            for (const m of modelsToTry) {
+              const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${apiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
+              });
+              const data = await resp.json();
+              if (resp.ok && data.candidates?.[0]?.content?.parts?.[0]?.text) {
+                raw = data.candidates[0].content.parts[0].text;
+                break;
+              }
+              lastErr = data.error?.message || `HTTP ${resp.status}`;
             }
           }
-          if (!data || !data.candidates) throw new Error(lastErr || 'Квота всех моделей исчерпана');
 
-          let raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+          // Fallback to OpenAI gpt-4o-mini if Gemini failed/missing
+          if (!raw && openaiKey) {
+            const oResp = await fetch('https://api.openai.com/v1/chat/completions', {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${openaiKey}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                model: 'gpt-4o-mini',
+                messages: [{ role: 'user', content: promptText }],
+                temperature: 0.7
+              })
+            });
+            const oData = await oResp.json();
+            if (!oResp.ok) throw new Error(oData.error?.message || 'OpenAI API error');
+            raw = oData.choices?.[0]?.message?.content || '';
+          }
+
+          if (!raw) throw new Error(lastErr || 'Не удалось сгенерировать сценарий (проверь квоту/ключи)');
           raw = raw.replace(/```json/gi, '').replace(/```/g, '').trim();
           const s = raw.indexOf('{');
           const e = raw.lastIndexOf('}');
@@ -2854,6 +2920,7 @@ ${spineClips}                    </spine>
         loadLinks();
         loadAnalytics();
         updateGeminiKeyBadge();
+        syncKeysFromCloud();
       }
 
       loadAllData();
