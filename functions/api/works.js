@@ -1,8 +1,35 @@
 // functions/api/works.js
 export async function onRequestGet(context) {
   try {
-    const data = await context.env.ZAKERII_DATA.get('works', 'json');
-    return new Response(JSON.stringify(data || []), {
+    let works = (await context.env.ZAKERII_DATA.get('works', 'json')) || [];
+
+    // Enrich legacy /api/media/<id> works (saved without extension or mediaType) using KV metadata
+    const needsMeta = works.some(
+      w => w && w.fileName && w.fileName.startsWith('/api/media/') && !w.mediaType && !/\.[a-z0-9]+(\?.*)?$/i.test(w.fileName)
+    );
+    if (needsMeta) {
+      const listed = await context.env.ZAKERII_DATA.list({ prefix: 'media:' });
+      const metaMap = new Map();
+      for (const k of (listed.keys || [])) {
+        if (k.metadata) metaMap.set(k.name, k.metadata);
+      }
+      works = works.map(w => {
+        if (w && w.fileName && w.fileName.startsWith('/api/media/') && !w.mediaType) {
+          const rawId = w.fileName.replace('/api/media/', '').split('?')[0];
+          const keyId = rawId.replace(/\.[a-zA-Z0-9]+$/, '');
+          const meta = metaMap.get(`media:${keyId}`) || metaMap.get(`media:${rawId}`);
+          if (meta && meta.contentType) {
+            return {
+              ...w,
+              mediaType: meta.contentType.startsWith('video/') ? 'video' : 'image'
+            };
+          }
+        }
+        return w;
+      });
+    }
+
+    return new Response(JSON.stringify(works), {
       headers: {
         'Content-Type': 'application/json',
         'Cache-Control': 'no-cache'
@@ -27,6 +54,7 @@ export async function onRequestPost(context) {
         title: body.title,
         category: body.category || 'anim video',
         fileName: body.fileName,
+        mediaType: body.mediaType || '',
         tags: body.tags || '',
         desc: body.desc || '',
         visible: true,
@@ -58,6 +86,7 @@ export async function onRequestPost(context) {
             tags: body.tags !== undefined ? body.tags : w.tags,
             desc: body.desc !== undefined ? body.desc : w.desc,
             fileName: body.fileName ? body.fileName : w.fileName,
+            mediaType: body.mediaType !== undefined ? body.mediaType : w.mediaType,
             visible: body.visible !== undefined ? body.visible : w.visible,
             featuredInCarousel: body.featuredInCarousel !== undefined ? body.featuredInCarousel : w.featuredInCarousel,
             updatedAt: new Date().toISOString()

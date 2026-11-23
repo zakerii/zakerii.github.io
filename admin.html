@@ -1442,6 +1442,13 @@
         }
       }
 
+      function isVideoWork(w) {
+        if (!w) return false;
+        if (w.mediaType === 'video') return true;
+        const f = (w.fileName || '').split('?')[0].toLowerCase();
+        return /\.(mp4|webm|mov|mkv|m4v|ogv)$/.test(f);
+      }
+
       function renderPortfolioAdminGrid(works) {
         document.getElementById('worksCount').textContent = works.length;
         const container = document.getElementById('portfolioGridAdmin');
@@ -1456,7 +1463,7 @@
           const isVis = w.visible !== false;
           const isCar = w.featuredInCarousel !== false;
           const mediaSrc = (w.fileName.startsWith('http') || w.fileName.startsWith('/')) ? w.fileName : `Imaganes/${w.fileName}`;
-          const isVideo = w.fileName.endsWith('.mp4') || w.fileName.endsWith('.webm');
+          const isVideo = isVideoWork(w);
 
           return `
             <div class="portfolio-card-admin ${isVis ? '' : 'hidden-work'}" draggable="true" data-id="${w.id}">
@@ -1472,7 +1479,7 @@
 
               <div class="card-media-box">
                 ${isVideo 
-                  ? `<video src="${mediaSrc}" muted autoplay loop playsinline></video>`
+                  ? `<video src="${mediaSrc}" muted autoplay loop playsinline preload="metadata"></video>`
                   : `<img src="${mediaSrc}" alt="${w.title}" onerror="this.onerror=null; this.src='Imaganes/LOGO.png';">`}
               </div>
 
@@ -1649,9 +1656,9 @@
         document.getElementById('fileSizeDisplay').textContent = (file.size / (1024*1024)).toFixed(2) + ' MB';
         document.getElementById('fileInfoBar').style.display = 'flex';
         const url = URL.createObjectURL(file);
-        const isVid = file.type.startsWith('video') || file.name.endsWith('.mp4');
+        const isVid = file.type.startsWith('video') || /\.(mp4|webm|mov|mkv|m4v|ogv)$/i.test(file.name);
         document.getElementById('dropzonePreview').innerHTML = isVid 
-          ? `<video src="${url}" autoplay loop muted controls style="max-height:220px; border-radius:10px; width:100%;"></video>`
+          ? `<video src="${url}" autoplay loop muted playsinline controls style="max-height:220px; border-radius:10px; width:100%;"></video>`
           : `<img src="${url}" alt="preview" style="max-height:220px; border-radius:10px; width:auto; margin:0 auto; display:block;">`;
         document.getElementById('dropzonePreview').style.display = 'block';
         if (!document.getElementById('workTitle').value) {
@@ -1703,6 +1710,7 @@
 
         try {
           let mediaFinalUrl = directUrl;
+          let mediaType = /\.(mp4|webm|mov|mkv|m4v|ogv)(\?.*)?$/i.test(directUrl) ? 'video' : 'image';
 
           // If physical file selected, upload directly to Cloudflare KV media storage
           if (selectedWorkFile) {
@@ -1722,6 +1730,9 @@
 
             const upResult = await uploadResp.json();
             mediaFinalUrl = upResult.url;
+            const isVidUpload = (upResult.mimeType && upResult.mimeType.startsWith('video/')) ||
+              /\.(mp4|webm|mov|mkv|m4v|ogv)$/i.test(selectedWorkFile.name);
+            mediaType = isVidUpload ? 'video' : 'image';
           }
 
           saveBtn.textContent = '💾 Публикация в портфолио...';
@@ -1736,6 +1747,7 @@
               tags,
               desc,
               fileName: mediaFinalUrl,
+              mediaType,
               featuredInCarousel
             })
           });
@@ -1782,10 +1794,10 @@
         document.getElementById('editWorkCurrentFileText').textContent = 'Текущий файл: ' + (w.fileName || 'не указан');
 
         const mediaSrc = (w.fileName && (w.fileName.startsWith('http') || w.fileName.startsWith('/'))) ? w.fileName : `Imaganes/${w.fileName}`;
-        const isVideo = w.fileName && (w.fileName.endsWith('.mp4') || w.fileName.endsWith('.webm'));
+        const isVideo = isVideoWork(w);
         document.getElementById('editWorkCurrentThumb').innerHTML = isVideo 
-          ? `<video src="${mediaSrc}" autoplay loop muted style="width:100%; height:100%; object-fit:cover;"></video>`
-          : `<img src="${mediaSrc}" alt="" style="width:100%; height:100%; object-fit:cover;">`;
+          ? `<video src="${mediaSrc}" autoplay loop muted playsinline preload="metadata" style="width:100%; height:100%; object-fit:cover;"></video>`
+          : `<img src="${mediaSrc}" alt="" style="width:100%; height:100%; object-fit:cover;" onerror="this.onerror=null; this.src='Imaganes/LOGO.png';">`;
 
         selectedEditFile = null;
         document.getElementById('editWorkFileBar').style.display = 'none';
@@ -1847,6 +1859,7 @@
 
         try {
           let updatedFileName = undefined;
+          let updatedMediaType = undefined;
 
           // If new file chosen, upload to Cloudflare KV media
           if (selectedEditFile) {
@@ -1866,8 +1879,12 @@
 
             const upResult = await uploadResp.json();
             updatedFileName = upResult.url;
+            const isVidUpload = (upResult.mimeType && upResult.mimeType.startsWith('video/')) ||
+              /\.(mp4|webm|mov|mkv|m4v|ogv)$/i.test(selectedEditFile.name);
+            updatedMediaType = isVidUpload ? 'video' : 'image';
           } else if (directUrl) {
             updatedFileName = directUrl;
+            updatedMediaType = /\.(mp4|webm|mov|mkv|m4v|ogv)(\?.*)?$/i.test(directUrl) ? 'video' : 'image';
           }
 
           saveBtn.textContent = '💾 Сохранение изменений...';
@@ -1884,6 +1901,9 @@
           };
           if (updatedFileName) {
             editPayload.fileName = updatedFileName;
+          }
+          if (updatedMediaType) {
+            editPayload.mediaType = updatedMediaType;
           }
 
           const resp = await fetch('/api/works', {

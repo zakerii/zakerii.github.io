@@ -30,9 +30,28 @@ export async function onRequestPost(context) {
       });
     }
 
-    const fileExt = file.name.split('.').pop().toLowerCase();
+    const extMatch = (file.name || '').match(/\.([a-zA-Z0-9]+)$/);
+    const fileExt = extMatch ? extMatch[1].toLowerCase() : '';
     const cleanId = 'm_' + Date.now() + '_' + Math.random().toString(36).substring(2, 8);
-    const mimeType = file.type || 'application/octet-stream';
+    const extMimeMap = {
+      mp4: 'video/mp4',
+      webm: 'video/webm',
+      mov: 'video/quicktime',
+      mkv: 'video/x-matroska',
+      m4v: 'video/x-m4v',
+      ogv: 'video/ogg',
+      png: 'image/png',
+      jpg: 'image/jpeg',
+      jpeg: 'image/jpeg',
+      gif: 'image/gif',
+      webp: 'image/webp',
+      svg: 'image/svg+xml',
+      glb: 'model/gltf-binary',
+      gltf: 'model/gltf+json'
+    };
+    const mimeType = (file.type && file.type !== 'application/octet-stream')
+      ? file.type
+      : (extMimeMap[fileExt] || 'application/octet-stream');
     const buffer = await file.arrayBuffer();
 
     // Store in Cloudflare KV
@@ -40,12 +59,13 @@ export async function onRequestPost(context) {
       metadata: {
         contentType: mimeType,
         fileName: file.name,
+        ext: fileExt,
         size: file.size,
         uploadedAt: new Date().toISOString()
       }
     });
 
-    const fileUrl = `/api/media/${cleanId}`;
+    const fileUrl = fileExt ? `/api/media/${cleanId}.${fileExt}` : `/api/media/${cleanId}`;
 
     return new Response(JSON.stringify({
       success: true,

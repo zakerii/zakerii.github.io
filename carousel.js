@@ -286,21 +286,28 @@ class ModernCarousel {
         <div class="lightbox-content">
           <button class="lightbox-close" title="Cerrar (Esc)">✕</button>
           <img class="lightbox-img" src="" alt="Vista Previa">
+          <video class="lightbox-video" src="" controls autoplay loop playsinline style="display:none; max-width:90vw; max-height:80vh; border-radius:12px;"></video>
           <div class="lightbox-caption"></div>
         </div>
       `;
       document.body.appendChild(modal);
 
+      const closeLightbox = () => {
+        modal.classList.remove('active');
+        const vid = modal.querySelector('.lightbox-video');
+        if (vid) { vid.pause(); vid.src = ''; }
+      };
+
       const closeBtn = modal.querySelector('.lightbox-close');
-      closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+      closeBtn.addEventListener('click', closeLightbox);
 
       modal.addEventListener('click', e => {
-        if (e.target === modal) modal.classList.remove('active');
+        if (e.target === modal) closeLightbox();
       });
 
       document.addEventListener('keydown', e => {
         if (e.key === 'Escape' && modal.classList.contains('active')) {
-          modal.classList.remove('active');
+          closeLightbox();
         }
       });
     }
@@ -309,9 +316,20 @@ class ModernCarousel {
     this.slides.forEach(slide => {
       slide.addEventListener('click', e => {
         const img = slide.querySelector('img');
-        if (img) {
-          const lightboxImg = modal.querySelector('.lightbox-img');
-          const lightboxCap = modal.querySelector('.lightbox-caption');
+        const video = slide.querySelector('video');
+        const lightboxImg = modal.querySelector('.lightbox-img');
+        const lightboxVid = modal.querySelector('.lightbox-video');
+        const lightboxCap = modal.querySelector('.lightbox-caption');
+
+        if (video) {
+          lightboxImg.style.display = 'none';
+          lightboxVid.style.display = 'block';
+          lightboxVid.src = video.currentSrc || video.src;
+          lightboxCap.textContent = video.title || 'Vista previa de animación';
+          modal.classList.add('active');
+        } else if (img) {
+          if (lightboxVid) { lightboxVid.pause(); lightboxVid.style.display = 'none'; }
+          lightboxImg.style.display = 'block';
           lightboxImg.src = img.src;
           lightboxCap.textContent = img.alt || 'Vista previa de trabajo 3D';
           modal.classList.add('active');

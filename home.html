@@ -219,13 +219,19 @@
             if (carouselWorks.length > 0) {
               const slidesUl = slider.querySelector('.slides');
               if (slidesUl) {
+                const isVideoWork = (w) => {
+                  if (!w) return false;
+                  if (w.mediaType === 'video') return true;
+                  const f = (w.fileName || '').split('?')[0].toLowerCase();
+                  return /\.(mp4|webm|mov|mkv|m4v|ogv)$/.test(f);
+                };
                 slidesUl.innerHTML = carouselWorks.map((w, idx) => {
                   const mediaSrc = (w.fileName.startsWith('http') || w.fileName.startsWith('/')) ? w.fileName : `Imaganes/${w.fileName}`;
-                  const isVideo = w.fileName.endsWith('.mp4') || w.fileName.endsWith('.webm');
+                  const isVideo = isVideoWork(w);
                   return `
                     <li class="slide" id="slide${idx + 1}">
                       ${isVideo 
-                        ? `<video src="${mediaSrc}" autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover;"></video>`
+                        ? `<video src="${mediaSrc}" title="${w.title} — ${w.desc || ''}" autoplay loop muted playsinline preload="metadata" style="width:100%; height:100%; object-fit:cover;"></video>`
                         : `<img src="${mediaSrc}" alt="${w.title}" title="${w.title} — ${w.desc || ''}">`}
                     </li>
                   `;
