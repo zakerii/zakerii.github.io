@@ -363,6 +363,122 @@
       background: #0b0f19;
     }
 
+    /* Planos Gallery */
+    .planos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 14px;
+    }
+    .plano-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .plano-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(0, 240, 255, 0.45);
+    }
+    .plano-thumb {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: contain;
+      background: #ffffff;
+      display: block;
+      cursor: zoom-in;
+    }
+    .plano-meta {
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12px;
+      color: #e2e8f0;
+    }
+    .plano-seek-btn {
+      background: rgba(0, 240, 255, 0.14);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      color: #00f0ff;
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .plano-seek-btn:hover { background: #00f0ff; color: #05070a; }
+
+    /* Character Bible Cards */
+    .char-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+    .char-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-radius: 14px;
+      padding: 18px;
+      color: #e2e8f0;
+    }
+    .char-card h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      color: #00f0ff;
+    }
+    .char-card p {
+      margin: 0 0 8px;
+      font-size: 13px;
+      line-height: 1.55;
+      color: #cbd5e1;
+    }
+    .palette-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .swatch {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-family: 'Consolas', monospace;
+      font-size: 11px;
+      color: #e2e8f0;
+    }
+    .swatch-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+    }
+
+    /* Simple Plano Zoom Lightbox */
+    .plano-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 7, 12, 0.92);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+    .plano-modal.open { display: flex; }
+    .plano-modal img {
+      max-width: 92vw;
+      max-height: 86vh;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+    }
+
     @media (max-width: 720px) {
       .doc-panel { padding: 16px; }
       .screenplay-sheet { padding: 22px 18px; font-size: 13px; }
@@ -460,7 +576,7 @@
             <span class="spec-chip">🎞️ 24 FPS • 1080p</span>
             <span class="spec-chip">🎬 4 Escenas • 16 Planos</span>
             <span class="spec-chip">🔊 Voces, SFX &amp; Música</span>
-            <span class="spec-chip">🛠️ Krita • Premiere / DaVinci</span>
+            <span class="spec-chip">🛠️ Krita • Illustrator • Premiere • DaVinci Resolve</span>
           </div>
         </header>
 
@@ -468,11 +584,12 @@
         <section class="cinema-card">
           <video id="animaticaPlayer" class="cinema-video" controls playsinline preload="metadata" src="Imaganes/Animatica_SpyMystery_Caso07.mp4"></video>
           <div class="cinema-bar">
-            <span>💡 <strong>Tip:</strong> Haz clic en cualquier plano del <em>Guion Técnico</em> de abajo para saltar directamente a ese segundo en la animática.</span>
+            <span>💡 <strong>Tip:</strong> Haz clic en cualquier plano del <em>Guion Técnico</em> o la <em>Galería de Planos</em> para saltar a ese segundo.</span>
             <div class="cinema-downloads">
               <a class="doc-dl-btn" href="docs/spy-mystery-caso-07/Guion_Literario.pdf" target="_blank" rel="noopener">📜 Guion Literario</a>
               <a class="doc-dl-btn" href="docs/spy-mystery-caso-07/Guion_Tecnico.pdf" target="_blank" rel="noopener">🎬 Guion Técnico</a>
               <a class="doc-dl-btn" href="docs/spy-mystery-caso-07/Storyboard.pdf" target="_blank" rel="noopener">🎨 Storyboard</a>
+              <a class="doc-dl-btn" href="docs/spy-mystery-caso-07/Diseno_de_Personaje.pdf" target="_blank" rel="noopener">👤 Biblia Personaje</a>
               <a class="doc-dl-btn" href="docs/spy-mystery-caso-07/Dossier_Completo.pdf" target="_blank" rel="noopener">📁 Dossier PDF</a>
             </div>
           </div>
@@ -482,6 +599,8 @@
         <div class="doc-tabs" role="tablist">
           <button type="button" class="doc-tab-btn active" data-tab="tabTecnico">🎬 Guion Técnico (16 Planos)</button>
           <button type="button" class="doc-tab-btn" data-tab="tabLiterario">📜 Guion Literario</button>
+          <button type="button" class="doc-tab-btn" data-tab="tabPlanos">🖼️ Galería de Planos (18)</button>
+          <button type="button" class="doc-tab-btn" data-tab="tabPersonaje">👤 Diseño de Personaje</button>
           <button type="button" class="doc-tab-btn" data-tab="tabStoryboard">🎨 Storyboard (PDF)</button>
           <button type="button" class="doc-tab-btn" data-tab="tabDossier">📁 Dossier Completo</button>
         </div>
@@ -598,7 +717,53 @@
           </div>
         </section>
 
-        <!-- TAB 3: STORYBOARD -->
+        <!-- TAB 3: GALERÍA DE PLANOS -->
+        <section id="tabPlanos" class="doc-panel">
+          <div class="panel-header">
+            <div>
+              <h2>🖼️ Galería de Planos Originales (16 Planos + Transiciones)</h2>
+              <p class="panel-hint">Haz clic en cualquier imagen para ampliarla o pulsa «▶ Ver» para saltar a ese plano en la animática.</p>
+            </div>
+          </div>
+          <div class="planos-grid" id="planosGalleryGrid"></div>
+        </section>
+
+        <!-- TAB 4: DISEÑO DE PERSONAJE -->
+        <section id="tabPersonaje" class="doc-panel">
+          <div class="panel-header">
+            <div>
+              <h2>👤 Diseño de Personaje — Biblia de «Spy Mystery»</h2>
+              <p class="panel-hint">Presentación del proyecto, caracterización, bocetos, hoja de construcción, giro, expresiones, color y escala comparativa (12 páginas).</p>
+            </div>
+            <a class="doc-dl-btn" href="docs/spy-mystery-caso-07/Diseno_de_Personaje.pdf" target="_blank" rel="noopener">⬇️ Abrir / Descargar Biblia PDF</a>
+          </div>
+
+          <div class="char-grid">
+            <div class="char-card">
+              <h3>🕵️ Zak — Protagonista (16 años • 180 cm)</h3>
+              <p>Joven detective brillante reclutado por <strong>Spy Incorporation</strong> tras obtener la mayor puntuación en 50 años para resolver «Casos Imposibles». Cuerpo atlético, mente analítica y vestuario dual (ropa diaria y atuendo de detective).</p>
+              <div class="palette-row">
+                <span class="swatch"><span class="swatch-dot" style="background:#c0d61f;"></span>#c0d61f</span>
+                <span class="swatch"><span class="swatch-dot" style="background:#00914e;"></span>#00914e</span>
+                <span class="swatch"><span class="swatch-dot" style="background:#534741;"></span>#534741</span>
+                <span class="swatch"><span class="swatch-dot" style="background:#998675;"></span>#998675</span>
+                <span class="swatch"><span class="swatch-dot" style="background:#e1cbb2;"></span>#e1cbb2</span>
+                <span class="swatch"><span class="swatch-dot" style="background:#2b2724;"></span>#2b2724</span>
+                <span class="swatch"><span class="swatch-dot" style="background:#1b2a4a;"></span>#1b2a4a</span>
+                <span class="swatch"><span class="swatch-dot" style="background:#f38825;"></span>#f38825</span>
+              </div>
+            </div>
+            <div class="char-card">
+              <h3>🤸 Masha — Coprotagonista (16 años • 170 cm)</h3>
+              <p>Compañera de Zak en la corporación, brillante detective y gimnasta con elasticidad casi sobrehumana que le permite infiltrarse donde nadie más puede. Personalidad fría y misteriosa pero profundamente empática.</p>
+              <p><strong>Estilo e influencias:</strong> Geometría estilizada inspirada en <em>Phineas &amp; Ferb</em> y <em>La ley de Milo Murphy</em>, narrativa de doble capa como <em>Смешарики</em>, y suspense/ciencia ficción de <em>Steins;Gate</em>, <em>Spy Classroom</em> y <em>Agatha Mystery</em>.</p>
+            </div>
+          </div>
+
+          <iframe class="pdf-frame" src="docs/spy-mystery-caso-07/Diseno_de_Personaje.pdf#view=FitH" title="Diseño de Personaje SPY MYSTERY"></iframe>
+        </section>
+
+        <!-- TAB 5: STORYBOARD -->
         <section id="tabStoryboard" class="doc-panel">
           <div class="panel-header">
             <div>
@@ -633,6 +798,10 @@
 
   </div>
 
+  <div class="plano-modal" id="planoZoomModal" title="Cerrar">
+    <img id="planoZoomImg" src="" alt="Plano ampliado">
+  </div>
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       // Tab switching
@@ -648,18 +817,71 @@
         });
       });
 
-      // Seek video when clicking a row in Guion Técnico
       const video = document.getElementById('animaticaPlayer');
+      function jumpToSec(sec) {
+        if (video && !isNaN(sec)) {
+          video.currentTime = sec;
+          video.play().catch(() => {});
+          video.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+
+      // Seek video when clicking a row in Guion Técnico
       document.querySelectorAll('.tech-table tbody tr[data-seek]').forEach(row => {
-        row.addEventListener('click', () => {
-          const sec = parseFloat(row.dataset.seek);
-          if (video && !isNaN(sec)) {
-            video.currentTime = sec;
-            video.play().catch(() => {});
-            video.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-        });
+        row.addEventListener('click', () => jumpToSec(parseFloat(row.dataset.seek)));
       });
+
+      // Populate Planos Gallery
+      const planosData = [
+        { img: 'plano-01.png', label: 'Esc. 1 — Plano 01', seek: 0 },
+        { img: 'plano-02.png', label: 'Esc. 1 — Plano 02', seek: 1 },
+        { img: 'plano-03.png', label: 'Esc. 1 — Plano 03', seek: 2.5 },
+        { img: 'plano-04.png', label: 'Esc. 1 — Plano 04', seek: 4.5 },
+        { img: 'plano-05.png', label: 'Esc. 1 — Plano 05', seek: 8 },
+        { img: 'plano-06.png', label: 'Esc. 1 — Plano 06', seek: 11.25 },
+        { img: 'plano-07.png', label: 'Esc. 1 — Plano 07', seek: 18.5 },
+        { img: 'fundido.png', label: 'Transición — Fundido', seek: 21 },
+        { img: 'plano-08.png', label: 'Esc. 2 — Plano 08', seek: 21 },
+        { img: 'plano-09.png', label: 'Esc. 2 — Plano 09', seek: 23 },
+        { img: 'plano-10.png', label: 'Esc. 2 — Plano 10', seek: 25.1 },
+        { img: 'plano-11.png', label: 'Esc. 2 — Plano 11', seek: 27.1 },
+        { img: 'plano-12.png', label: 'Esc. 2 — Plano 12', seek: 29 },
+        { img: 'cortinilla.png', label: 'Transición — Cortinilla', seek: 32.5 },
+        { img: 'plano-13.png', label: 'Esc. 3 — Plano 13', seek: 35.8 },
+        { img: 'plano-14.png', label: 'Esc. 4 — Plano 14', seek: 37.6 },
+        { img: 'plano-15.png', label: 'Esc. 4 — Plano 15', seek: 45.8 },
+        { img: 'plano-16.png', label: 'Esc. 4 — Plano 16', seek: 50.8 }
+      ];
+      const grid = document.getElementById('planosGalleryGrid');
+      const modal = document.getElementById('planoZoomModal');
+      const modalImg = document.getElementById('planoZoomImg');
+      if (grid) {
+        grid.innerHTML = planosData.map(p => `
+          <div class="plano-card">
+            <img class="plano-thumb" loading="lazy" src="docs/spy-mystery-caso-07/planos/${p.img}" alt="${p.label}">
+            <div class="plano-meta">
+              <strong>${p.label}</strong>
+              <button type="button" class="plano-seek-btn" data-seek="${p.seek}">▶ Ver</button>
+            </div>
+          </div>
+        `).join('');
+        grid.querySelectorAll('.plano-thumb').forEach(img => {
+          img.addEventListener('click', () => {
+            modalImg.src = img.src;
+            modalImg.alt = img.alt;
+            modal.classList.add('open');
+          });
+        });
+        grid.querySelectorAll('.plano-seek-btn').forEach(btn => {
+          btn.addEventListener('click', () => jumpToSec(parseFloat(btn.dataset.seek)));
+        });
+      }
+      if (modal) {
+        modal.addEventListener('click', () => modal.classList.remove('open'));
+        document.addEventListener('keydown', e => {
+          if (e.key === 'Escape') modal.classList.remove('open');
+        });
+      }
 
       // Copy microlink
       const copyBtn = document.getElementById('copyMicroLinkBtn');
