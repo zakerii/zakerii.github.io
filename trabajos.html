@@ -836,8 +836,12 @@
               const card = document.createElement('div');
               card.className = 'work-card';
               card.dataset.category = w.category || 'anim';
-              const caseUrl = w.caseStudyUrl || (w.fileName === 'Animatica_SpyMystery_Caso07.mp4' ? '/caso07' : '');
-              const caseLabel = w.caseStudyLabel || `📄 Guion, Técnico & Storyboard (zakerii.com${caseUrl})`;
+              const isWalkCycle = (w.title || '').toLowerCase().includes('walkcycle') && isVideo;
+              const caseUrl = w.caseStudyUrl
+                || (w.fileName === 'Animatica_SpyMystery_Caso07.mp4' ? '/caso07' : '')
+                || (isWalkCycle ? '/walkcycle' : '');
+              const caseLabel = w.caseStudyLabel
+                || (caseUrl === '/walkcycle' ? '🚶 Ver Pipeline Completo (zakerii.com/walkcycle)' : `📄 Guion, Técnico & Storyboard (zakerii.com${caseUrl})`);
               const caseLinkHtml = caseUrl
                 ? `<a href="${caseUrl}" style="display:inline-flex; align-items:center; gap:6px; margin-top:12px; padding:7px 12px; border-radius:10px; background:rgba(0,240,255,0.12); border:1px solid rgba(0,240,255,0.35); color:#00f0ff; font-size:12px; font-weight:700; text-decoration:none; transition:all 0.2s ease;" onmouseover="this.style.background='#00f0ff'; this.style.color='#05070a';" onmouseout="this.style.background='rgba(0,240,255,0.12)'; this.style.color='#00f0ff';">${caseLabel} →</a>`
                 : '';

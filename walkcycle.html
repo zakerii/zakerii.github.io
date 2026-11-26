@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Walk Cycle 2D — Pipeline &amp; Case Study | Zakerii</title>
+  <meta name="description" content="Proceso completo de animación 2D Walk Cycle por Zakhar Oleksenko Shapoval (Zakerii): Boceto, Línea Limpia, Color, Fondos y Composición Final con sonido.">
+  <link rel="icon" type="image/png" href="Imaganes/LOGO.png">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="Estilos.css">
+  <script src="sound.js" defer></script>
+  <script src="index.js" defer></script>
+
+  <style>
+    .case-wrap { max-width: 1120px; margin: 0 auto; padding: 10px 0 40px; }
+    .case-topbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 22px; }
+    .case-back-btn {
+      display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px;
+      background: rgba(0, 240, 255, 0.08); border: 1px solid rgba(0, 240, 255, 0.3);
+      color: var(--primary, #00f0ff); text-decoration: none; font-size: 13px; font-weight: 700; transition: all 0.2s ease;
+    }
+    .case-back-btn:hover { background: rgba(0, 240, 255, 0.18); transform: translateX(-2px); }
+
+    .microlink-pill {
+      display: inline-flex; align-items: center; gap: 10px; padding: 7px 14px; border-radius: 999px;
+      background: rgba(13, 15, 23, 0.85); border: 1px solid rgba(0, 240, 255, 0.28); font-size: 12.5px; color: #cbd5e1;
+    }
+    .microlink-pill code { color: #00f0ff; font-family: 'Consolas', monospace; font-weight: 700; }
+    .microlink-copy {
+      background: rgba(0, 240, 255, 0.15); border: 1px solid rgba(0, 240, 255, 0.35); color: #00f0ff;
+      border-radius: 999px; padding: 4px 10px; font-size: 11.5px; font-weight: 700; cursor: pointer;
+    }
+    .microlink-copy:hover { background: #00f0ff; color: #05070a; }
+
+    .case-hero { text-align: center; margin-bottom: 24px; }
+    .case-eyebrow {
+      display: inline-block; padding: 5px 14px; border-radius: 999px;
+      background: rgba(0, 240, 255, 0.12); border: 1px solid rgba(0, 240, 255, 0.35);
+      color: #00f0ff; font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .case-title {
+      font-size: clamp(26px, 4vw, 40px); font-weight: 900; margin: 0 0 10px;
+      background: linear-gradient(135deg, #ffffff 0%, #00f0ff 65%, #7c3aed 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .case-subtitle { color: var(--text-muted, #94a3b8); max-width: 720px; margin: 0 auto 18px; font-size: 14.5px; line-height: 1.6; }
+    .case-specs { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 24px; }
+    .spec-chip { padding: 6px 13px; border-radius: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); font-size: 12px; font-weight: 600; color: #e2e8f0; }
+
+    .cinema-card {
+      background: #070a10; border: 1px solid rgba(0, 240, 255, 0.25); border-radius: 18px;
+      overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.55); margin-bottom: 34px;
+    }
+    .cinema-video { width: 100%; aspect-ratio: 16 / 9; display: block; background: #000; }
+    .cinema-bar {
+      padding: 14px 20px; background: rgba(13, 17, 27, 0.95); border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 13px; color: #94a3b8; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px;
+    }
+
+    .section-title { font-size: 20px; font-weight: 800; color: #fff; margin: 0 0 6px; }
+    .section-sub { font-size: 13.5px; color: #94a3b8; margin: 0 0 20px; }
+
+    .pipeline-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 18px; margin-bottom: 34px;
+    }
+    .stage-card {
+      background: rgba(13, 17, 27, 0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px;
+      overflow: hidden; transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .stage-card:hover { transform: translateY(-4px); border-color: rgba(0, 240, 255, 0.45); }
+    .stage-media { width: 100%; aspect-ratio: 16 / 10; object-fit: contain; background: #ffffff; display: block; }
+    .stage-body { padding: 16px; }
+    .stage-num {
+      display: inline-block; padding: 3px 10px; border-radius: 999px; background: rgba(0, 240, 255, 0.14);
+      color: #00f0ff; font-size: 11px; font-weight: 800; margin-bottom: 8px;
+    }
+    .stage-body h3 { margin: 0 0 6px; font-size: 16px; color: #fff; }
+    .stage-body p { margin: 0; font-size: 13px; color: #94a3b8; line-height: 1.5; }
+
+    .assets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+    .asset-card {
+      background: rgba(13, 17, 27, 0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden;
+    }
+    .asset-card img { width: 100%; height: 220px; object-fit: contain; background: #090d16; display: block; padding: 10px; }
+    .asset-cap { padding: 12px 16px; font-size: 13px; color: #cbd5e1; border-top: 1px solid rgba(255,255,255,0.06); }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="LOGO">
+      <a href="home.html"><img src="Imaganes/LOGO.png" alt="Zakerii Logo" class="logo-image"></a>
+      <div class="logo-text">
+        <p class="portfolio-title">PORFOLIO DE</p>
+        <p class="name"></p>
+      </div>
+    </div>
+
+    <div class="ICONS">
+      <nav class="NAVEGACION">
+        <ul>
+          <li><a title="HOME" href="home.html"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></a></li>
+          <li><a title="PORTAFOLIO" href="trabajos.html" class="active"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/><path d="M2 10h20"/></svg></a></li>
+          <li><a title="CONTACTO" href="contacto.html"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"/></svg></a></li>
+          <li><a title="QUIEN SOY" href="about.html"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/></svg></a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="SETTIGNS">
+      <input id="lightmode-toggle" type="checkbox">
+      <label class="toggle" for="lightmode-toggle"></label>
+    </div>
+
+    <div class="MAIN">
+      <div class="case-wrap">
+        <div class="case-topbar">
+          <a href="trabajos.html" class="case-back-btn">← Volver al Portafolio</a>
+          <div class="microlink-pill">
+            <span>🔗 Enlace directo:</span>
+            <code>zakerii.com/walkcycle</code>
+            <button type="button" class="microlink-copy" id="copyWalkLinkBtn">Copiar</button>
+          </div>
+        </div>
+
+        <header class="case-hero">
+          <span class="case-eyebrow">Animación 2D Frame a Frame • Pipeline Completo</span>
+          <h1 class="case-title">WALK CYCLE — ZAKHAR OLEKSENKO</h1>
+          <p class="case-subtitle">
+            Desglose completo de producción del ciclo de caminata: desde el boceto de poses clave (Contact, Down, Passing, Up),
+            limpieza de línea y coloreado en Krita hasta la composición final con escenario vectorial, coche y diseño sonoro en Premiere.
+          </p>
+          <div class="case-specs">
+            <span class="spec-chip">✏️ Animación Frame a Frame</span>
+            <span class="spec-chip">🎞️ Full HD 1080p</span>
+            <span class="spec-chip">🔊 Pasos, Ambiente &amp; Motor SFX</span>
+            <span class="spec-chip">🛠️ Krita • Illustrator • Premiere Pro</span>
+          </div>
+        </header>
+
+        <section class="cinema-card">
+          <video class="cinema-video" controls autoplay loop playsinline preload="metadata" src="docs/walkcycle/walkcycle_final.mp4"></video>
+          <div class="cinema-bar">
+            <span>🎬 <strong>Resultado Final:</strong> Composición completa con parallax, vehículo en movimiento y mezcla de sonido.</span>
+            <span>Activa el sonido en el reproductor 🔊</span>
+          </div>
+        </section>
+
+        <h2 class="section-title">🔄 Evolución del Pipeline (Paso a Paso)</h2>
+        <p class="section-sub">Comparativa de cada fase de animación antes del montaje final.</p>
+
+        <div class="pipeline-grid">
+          <article class="stage-card">
+            <img class="stage-media" src="docs/walkcycle/01_boceto.gif" alt="Fase 1: Boceto Walk Cycle">
+            <div class="stage-body">
+              <span class="stage-num">FASE 01 • BOCETO</span>
+              <h3>Rough Animation (Poses Clave)</h3>
+              <p>Bloqueo de timing, arco de movimiento, peso del cuerpo y sincronización de brazos y piernas frame a frame en Krita.</p>
+            </div>
+          </article>
+
+          <article class="stage-card">
+            <img class="stage-media" src="docs/walkcycle/02_linea.gif" alt="Fase 2: Línea Limpia Walk Cycle">
+            <div class="stage-body">
+              <span class="stage-num">FASE 02 • CLEAN-UP</span>
+              <h3>Línea Limpia (Lineart)</h3>
+              <p>Trazado final limpio y consistente manteniendo el volumen del personaje en cada fotograma del ciclo.</p>
+            </div>
+          </article>
+
+          <article class="stage-card">
+            <img class="stage-media" src="docs/walkcycle/03_color.gif" alt="Fase 3: Color Walk Cycle">
+            <div class="stage-body">
+              <span class="stage-num">FASE 03 • COLOR</span>
+              <h3>Coloreado &amp; Paleta Final</h3>
+              <p>Aplicación de colores sólidos según la guía del personaje listo para integrarse en la composición con fondo.</p>
+            </div>
+          </article>
+        </div>
+
+        <h2 class="section-title">🎨 Assets de Composición (Illustrator)</h2>
+        <p class="section-sub">Elementos vectoriales creados para dar profundidad y movimiento a la escena.</p>
+
+        <div class="assets-grid">
+          <div class="asset-card">
+            <img src="docs/walkcycle/fondo.png" alt="Fondo vectorial Walk Cycle">
+            <div class="asset-cap"><strong>Fondo Escenario</strong> — Ilustración vectorial preparada para scroll en composición.</div>
+          </div>
+          <div class="asset-card">
+            <img src="docs/walkcycle/coche.png" alt="Prop Coche Walk Cycle">
+            <div class="asset-cap"><strong>Prop Vehículo (Coche)</strong> — Elemento animado en primer/segundo plano sincronizado con SFX de motor.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="FOOTER">
+      <p>Diseñado por Zakhar Oleksenko Shapoval</p>
+      <p class="email"><a href="mailto:pr.zakerii@gmail.com">pr.zakerii@gmail.com</a></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('copyWalkLinkBtn')?.addEventListener('click', async function () {
+      try {
+        await navigator.clipboard.writeText('https://zakerii.com/walkcycle');
+        this.textContent = '✓ Copiado';
+        setTimeout(() => { this.textContent = 'Copiar'; }, 2000);
+      } catch {
+        this.textContent = 'zakerii.com/walkcycle';
+      }
+    });
+  </script>
+</body>
+
+</html>

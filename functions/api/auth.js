@@ -36,6 +36,33 @@ export async function onRequestPost(context) {
         });
       }
 
+      // Server-side Cloudflare Turnstile (CAPTCHA) verification
+      if (context.env.TURNSTILE_SECRET_KEY) {
+        const cfToken = body.turnstileToken || '';
+        if (!cfToken) {
+          return new Response(JSON.stringify({ success: false, error: 'Подтвердите проверку Cloudflare Turnstile (CAPTCHA).' }), {
+            status: 403,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+        const form = new URLSearchParams();
+        form.append('secret', context.env.TURNSTILE_SECRET_KEY);
+        form.append('response', cfToken);
+        if (clientIp && clientIp !== 'unknown') form.append('remoteip', clientIp);
+
+        const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+          method: 'POST',
+          body: form
+        });
+        const verifyData = await verifyRes.json();
+        if (!verifyData.success) {
+          return new Response(JSON.stringify({ success: false, error: 'Проверка CAPTCHA не пройдена. Попробуйте снова.' }), {
+            status: 403,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+      }
+
       const username = (body.username || '').trim().toLowerCase();
       const password = body.password || '';
       const creds = await getStoredCredentials(context.env);

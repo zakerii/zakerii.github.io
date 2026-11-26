@@ -8,6 +8,7 @@
   <title>Admin Dashboard — ZAKERII STUDIO</title>
   <link rel="icon" type="image/png" href="Imaganes/LOGO.png">
   <link rel="stylesheet" href="Estilos.css">
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <style>
     :root {
       --admin-bg: #07090e;
@@ -464,6 +465,8 @@
             <button type="button" id="togglePassVisibilityBtn" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--admin-muted); cursor:pointer; font-size:16px;">👁️</button>
           </div>
         </div>
+
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAAGTg1a-0OMURnA0X" data-theme="dark" style="margin: 14px 0; display: flex; justify-content: center;"></div>
 
         <div id="authError" style="display: none; color: var(--admin-danger); font-size: 13px; font-weight: 600; margin-bottom: 14px; line-height: 1.4;">
           Неверный логин или пароль
@@ -1327,12 +1330,14 @@
         e.preventDefault();
         const u = document.getElementById('adminUser').value.trim();
         const p = document.getElementById('adminPass').value;
+        const turnstileInput = loginForm.querySelector('[name="cf-turnstile-response"]');
+        const turnstileToken = turnstileInput ? turnstileInput.value : '';
 
         try {
           const res = await fetch('/api/auth', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'login', username: u, password: p })
+            body: JSON.stringify({ action: 'login', username: u, password: p, turnstileToken })
           });
           const data = await res.json();
 
@@ -1344,10 +1349,12 @@
           } else {
             authError.style.display = 'block';
             authError.textContent = data.error || 'Неверный логин или пароль.';
+            if (window.turnstile) window.turnstile.reset();
           }
         } catch (err) {
           authError.style.display = 'block';
           authError.textContent = 'Ошибка соединения с сервером авторизации.';
+          if (window.turnstile) window.turnstile.reset();
         }
       });
 
