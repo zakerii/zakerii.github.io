@@ -1,6 +1,16 @@
 // functions/api/analytics.js
 export async function onRequestGet(context) {
   try {
+    const authHeader = context.request.headers.get('Authorization') || '';
+    const sessionToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
+    const authedUser = sessionToken ? await context.env.ZAKERII_DATA.get(`session:${sessionToken}`) : null;
+    if (!authedUser) {
+      return new Response(JSON.stringify({ success: false, error: 'Unauthorized' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
     const token = context.env.CF_API_TOKEN;
     const zoneId = context.env.CF_ZONE_ID || 'f12a7b01cd63e23b45b9b6dfc5c94c40';
 

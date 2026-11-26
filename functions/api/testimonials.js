@@ -37,14 +37,21 @@ export async function onRequestPost(context) {
     let list = (await context.env.ZAKERII_DATA.get('testimonials', 'json')) || [];
 
     if (action === 'submit') {
-      // Incoming from public client (with length limits)
+      // Incoming from public client (sanitized against Stored XSS + length limits)
+      const sanitize = (str, max) => String(str || '')
+        .slice(0, max)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
       const newReview = {
         id: 'rev_' + Date.now(),
-        author: String(body.author || 'Cliente anónimo').slice(0, 80),
-        project: String(body.project || 'Servicio creativo').slice(0, 120),
-        platform: String(body.platform || 'Web').slice(0, 40),
+        author: sanitize(body.author || 'Cliente anónimo', 80),
+        project: sanitize(body.project || 'Servicio creativo', 120),
+        platform: sanitize(body.platform || 'Web', 40),
         rating: Math.max(1, Math.min(5, Number(body.rating) || 5)),
-        text: String(body.text || '').slice(0, 1000),
+        text: sanitize(body.text || '', 1000),
         status: 'pending', // Requires admin approval!
         date: new Date().toLocaleDateString()
       };

@@ -3,14 +3,20 @@
 /admin*
   Cache-Control: no-cache, no-store, must-revalidate
   X-Robots-Tag: noindex, nofollow
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
 
 /admin.html
   Cache-Control: no-cache, no-store, must-revalidate
   X-Robots-Tag: noindex, nofollow
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
 
 /api/*
   Cache-Control: no-cache, no-store, must-revalidate
-  Access-Control-Allow-Origin: *
+  X-Content-Type-Options: nosniff
 
 /api/media/*
   Cache-Control: public, max-age=31536000, immutable
