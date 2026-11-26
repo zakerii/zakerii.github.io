@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPY MYSTERY — CASO 07 | Dossier & Animática — Zakerii</title>
+  <meta name="description" content="Animática completa, guion literario, guion técnico plano a plano y storyboard de SPY MYSTERY — CASO 07, creado por Zakhar Oleksenko Shapoval (Zakerii).">
+  <link rel="icon" type="image/png" href="Imaganes/LOGO.png">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="Estilos.css">
+  <script src="sound.js" defer></script>
+  <script src="index.js" defer></script>
+
+  <style>
+    .case-wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 10px 0 40px;
+    }
+
+    .case-topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .case-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 999px;
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      color: var(--primary, #00f0ff);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+    .case-back-btn:hover {
+      background: rgba(0, 240, 255, 0.18);
+      transform: translateX(-2px);
+    }
+
+    .microlink-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(13, 15, 23, 0.85);
+      border: 1px solid rgba(0, 240, 255, 0.28);
+      font-size: 12.5px;
+      color: #cbd5e1;
+    }
+    .microlink-pill code {
+      color: #00f0ff;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-weight: 700;
+      font-size: 12.5px;
+    }
+    .microlink-copy {
+      background: rgba(0, 240, 255, 0.15);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      color: #00f0ff;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .microlink-copy:hover {
+      background: #00f0ff;
+      color: #05070a;
+    }
+
+    .case-hero {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .case-eyebrow {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 999px;
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      color: #00f0ff;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .case-title {
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      margin: 0 0 10px;
+      background: linear-gradient(135deg, #ffffff 0%, #00f0ff 65%, #7c3aed 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .case-subtitle {
+      color: var(--text-muted, #94a3b8);
+      max-width: 720px;
+      margin: 0 auto 18px;
+      font-size: 14.5px;
+      line-height: 1.6;
+    }
+
+    .case-specs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .spec-chip {
+      padding: 6px 13px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 12px;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    .cinema-card {
+      background: #070a10;
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+      margin-bottom: 30px;
+    }
+    .cinema-video {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      display: block;
+      background: #000;
+    }
+    .cinema-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 20px;
+      background: rgba(13, 17, 27, 0.95);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 13px;
+      color: #94a3b8;
+    }
+    .cinema-downloads {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .doc-dl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      border-radius: 8px;
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      color: #00f0ff;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+    .doc-dl-btn:hover {
+      background: #00f0ff;
+      color: #05070a;
+    }
+
+    /* Tabs */
+    .doc-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+      justify-content: center;
+    }
+    .doc-tab-btn {
+      padding: 11px 18px;
+      border-radius: 12px;
+      background: rgba(13, 17, 27, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #cbd5e1;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .doc-tab-btn:hover {
+      border-color: rgba(0, 240, 255, 0.45);
+      color: #fff;
+    }
+    .doc-tab-btn.active {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(124, 58, 237, 0.25));
+      border-color: #00f0ff;
+      color: #ffffff;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.18);
+    }
+
+    .doc-panel {
+      display: none;
+      background: rgba(13, 17, 27, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+    }
+    .doc-panel.active {
+      display: block;
+    }
+
+    .panel-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .panel-header h2 {
+      margin: 0;
+      font-size: 19px;
+      color: #fff;
+    }
+    .panel-hint {
+      font-size: 12.5px;
+      color: #94a3b8;
+      margin: 4px 0 0;
+    }
+
+    /* Technical Script Table */
+    .tech-table-wrap {
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .tech-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      color: #e2e8f0;
+      min-width: 820px;
+    }
+    .tech-table th {
+      background: rgba(0, 240, 255, 0.12);
+      color: #00f0ff;
+      text-align: left;
+      padding: 11px 10px;
+      font-weight: 800;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    .tech-table td {
+      padding: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      vertical-align: top;
+      line-height: 1.45;
+    }
+    .tech-table tbody tr {
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .tech-table tbody tr:hover {
+      background: rgba(0, 240, 255, 0.08);
+    }
+    .tech-table tbody tr.transition-row {
+      background: rgba(124, 58, 237, 0.1);
+      font-style: italic;
+      color: #cbd5e1;
+    }
+    .time-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(0, 240, 255, 0.14);
+      color: #00f0ff;
+      font-family: 'Consolas', monospace;
+      font-weight: 700;
+      font-size: 11.5px;
+      white-space: nowrap;
+    }
+
+    /* Literary Screenplay */
+    .screenplay-sheet {
+      max-width: 760px;
+      margin: 0 auto;
+      background: #f8fafc;
+      color: #0f172a;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+      line-height: 1.65;
+      padding: 36px 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    .sp-title {
+      text-align: center;
+      font-weight: 700;
+      font-size: 17px;
+      margin-bottom: 4px;
+    }
+    .sp-author {
+      text-align: center;
+      font-style: italic;
+      margin-bottom: 28px;
+      color: #475569;
+    }
+    .sp-scene {
+      font-weight: 700;
+      text-transform: uppercase;
+      margin: 24px 0 10px;
+      letter-spacing: 0.02em;
+    }
+    .sp-action {
+      margin: 0 0 14px;
+    }
+    .sp-char {
+      text-align: center;
+      font-weight: 700;
+      margin: 14px 0 2px;
+    }
+    .sp-paren {
+      text-align: center;
+      color: #475569;
+      margin: 0 0 2px;
+    }
+    .sp-dial {
+      max-width: 460px;
+      margin: 0 auto 14px;
+    }
+    .sp-trans {
+      text-align: right;
+      font-weight: 700;
+      margin: 18px 0;
+    }
+
+    /* Embedded PDF */
+    .pdf-frame {
+      width: 100%;
+      height: 760px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      background: #0b0f19;
+    }
+
+    @media (max-width: 720px) {
+      .doc-panel { padding: 16px; }
+      .screenplay-sheet { padding: 22px 18px; font-size: 13px; }
+      .pdf-frame { height: 520px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- ===== LOGO ===== -->
+    <div class="LOGO">
+      <a href="home.html">
+        <img src="Imaganes/LOGO.png" alt="Zakerii Logo" class="logo-image">
+      </a>
+      <div class="logo-text">
+        <p class="portfolio-title">PORFOLIO DE</p>
+        <p class="name"></p>
+      </div>
+    </div>
+
+    <!-- ===== NAVEGACION ===== -->
+    <div class="ICONS">
+      <nav class="NAVEGACION">
+        <ul>
+          <li>
+            <a title="HOME" href="home.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a title="PORTAFOLIO" href="trabajos.html" class="active">
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
+                <path d="M2 10h20" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a title="CONTACTO" href="contacto.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a title="QUIEN SOY" href="about.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <circle cx="12" cy="10" r="3" />
+                <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- ===== SETTINGS ===== -->
+    <div class="SETTIGNS">
+      <input id="lightmode-toggle" type="checkbox">
+      <label class="toggle" for="lightmode-toggle"></label>
+    </div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="MAIN">
+      <div class="case-wrap">
+
+        <div class="case-topbar">
+          <a href="trabajos.html" class="case-back-btn">← Volver al Portafolio</a>
+          <div class="microlink-pill">
+            <span>🔗 Enlace directo:</span>
+            <code>zakerii.com/caso07</code>
+            <button type="button" class="microlink-copy" id="copyMicroLinkBtn">Copiar</button>
+          </div>
+        </div>
+
+        <header class="case-hero">
+          <span class="case-eyebrow">Preproducción • Animática • Case Study</span>
+          <h1 class="case-title">SPY MYSTERY — CASO 07</h1>
+          <p class="case-subtitle">
+            Proyecto completo de preproducción audiovisual desarrollado por <strong>Zakhar Oleksenko Shapoval</strong>:
+            desde el guion literario y el desglose técnico plano a plano hasta el storyboard ilustrado y la animática final sonorizada.
+          </p>
+          <div class="case-specs">
+            <span class="spec-chip">⏱️ 01:02 (62.46 s)</span>
+            <span class="spec-chip">🎞️ 24 FPS • 1080p</span>
+            <span class="spec-chip">🎬 4 Escenas • 16 Planos</span>
+            <span class="spec-chip">🔊 Voces, SFX &amp; Música</span>
+            <span class="spec-chip">🛠️ Krita • Premiere / DaVinci</span>
+          </div>
+        </header>
+
+        <!-- Cinema Video Player -->
+        <section class="cinema-card">
+          <video id="animaticaPlayer" class="cinema-video" controls playsinline preload="metadata" src="Imaganes/Animatica_SpyMystery_Caso07.mp4"></video>
+          <div class="cinema-bar">
+            <span>💡 <strong>Tip:</strong> Haz clic en cualquier plano del <em>Guion Técnico</em> de abajo para saltar directamente a ese segundo en la animática.</span>
+            <div class="cinema-downloads">
+              <a class="doc-dl-btn" href="docs/spy-mystery-caso-07/Guion_Literario.pdf" target="_blank" rel="noopener">📜 Guion Literario</a>
+              <a class="doc-dl-btn" href="docs/spy-mystery-caso-07/Guion_Tecnico.pdf" target="_blank" rel="noopener">🎬 Guion Técnico</a>
+              <a class="doc-dl-btn" href="docs/spy-mystery-caso-07/Storyboard.pdf" target="_blank" rel="noopener">🎨 Storyboard</a>
+              <a class="doc-dl-btn" href="docs/spy-mystery-caso-07/Dossier_Completo.pdf" target="_blank" rel="noopener">📁 Dossier PDF</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Interactive Documentation Tabs -->
+        <div class="doc-tabs" role="tablist">
+          <button type="button" class="doc-tab-btn active" data-tab="tabTecnico">🎬 Guion Técnico (16 Planos)</button>
+          <button type="button" class="doc-tab-btn" data-tab="tabLiterario">📜 Guion Literario</button>
+          <button type="button" class="doc-tab-btn" data-tab="tabStoryboard">🎨 Storyboard (PDF)</button>
+          <button type="button" class="doc-tab-btn" data-tab="tabDossier">📁 Dossier Completo</button>
+        </div>
+
+        <!-- TAB 1: GUION TÉCNICO -->
+        <section id="tabTecnico" class="doc-panel active">
+          <div class="panel-header">
+            <div>
+              <h2>🎬 Guion Técnico — Desglose Plano a Plano</h2>
+              <p class="panel-hint">Haz clic en cualquier fila para ir directamente a ese plano en el reproductor.</p>
+            </div>
+            <a class="doc-dl-btn" href="docs/spy-mystery-caso-07/Guion_Tecnico.pdf" target="_blank" rel="noopener">⬇️ Abrir PDF original</a>
+          </div>
+
+          <div class="tech-table-wrap">
+            <table class="tech-table">
+              <thead>
+                <tr>
+                  <th>Esc.</th>
+                  <th>Plano</th>
+                  <th>Encuadre</th>
+                  <th>Mov.</th>
+                  <th>Acción</th>
+                  <th>Diálogos</th>
+                  <th>Sonido</th>
+                  <th>Duración</th>
+                  <th>Inicio</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-seek="0"><td>1</td><td>1</td><td>Gran plano general de SpyCorporation</td><td>Tilt down</td><td>La cámara está enfocada en las letras del edificio y baja hacia donde está Zak.</td><td>—</td><td>Sonidos de ciudad</td><td>00:01:00</td><td><span class="time-pill">▶ 00:00</span></td></tr>
+                <tr data-seek="1"><td>1</td><td>2</td><td>Plano entero</td><td>Zoom in</td><td>La cámara baja a la planta donde está Zak.</td><td>—</td><td>Teclado</td><td>00:01:12</td><td><span class="time-pill">▶ 00:01</span></td></tr>
+                <tr data-seek="2.5"><td>1</td><td>3</td><td>Plano perfil</td><td>Estático</td><td>La cámara está en la planta de la oficina de Zak.</td><td>—</td><td>Teclado</td><td>00:02:00</td><td><span class="time-pill">▶ 00:02</span></td></tr>
+                <tr data-seek="4.5"><td>1</td><td>4</td><td>Plano medio</td><td>Estático</td><td>Zak está trabajando con el ordenador.</td><td>—</td><td>Voz robotizada</td><td>00:03:12</td><td><span class="time-pill">▶ 00:04</span></td></tr>
+                <tr data-seek="8"><td>1</td><td>5</td><td>Plano subjetivo</td><td>Estático</td><td>De repente ve un mensaje cifrado de Masha en el ordenador.</td><td>SISTEMA: «Descifrado del mensaje en curso.»</td><td>VFX mensaje</td><td>00:03:06</td><td><span class="time-pill">▶ 00:08</span></td></tr>
+                <tr data-seek="11.25"><td>1</td><td>6</td><td>Plano detalle</td><td>Zoom in</td><td>Aparece un mensaje de su compañera Masha en pantalla.</td><td>MASHA: «Buenos días, acabo de encontrar un informe bastante preocupante…»</td><td>Corte de electricidad</td><td>00:07:06</td><td><span class="time-pill">▶ 00:11</span></td></tr>
+                <tr data-seek="18.5"><td>1</td><td>7</td><td>Plano perfil</td><td>Estático</td><td>Se apaga la luz en toda la oficina.</td><td>ZAK: «Qué extraño, no debería dar error…»</td><td>Corte de electricidad</td><td>00:02:12</td><td><span class="time-pill">▶ 00:18</span></td></tr>
+                <tr class="transition-row" data-seek="21"><td>—</td><td>—</td><td>EL FUNDIDO</td><td>—</td><td>Transición a negro entre escenas.</td><td>—</td><td>Transición</td><td>—</td><td><span class="time-pill">▶ 00:21</span></td></tr>
+                <tr data-seek="21"><td>2</td><td>8</td><td>Gran plano general de la OATT / Picado</td><td>Tilt down</td><td>Edificio de la OATT desde fuera.</td><td>—</td><td>—</td><td>00:02:00</td><td><span class="time-pill">▶ 00:21</span></td></tr>
+                <tr data-seek="23"><td>2</td><td>9</td><td>Plano detalle / Contrapicado</td><td>Estático</td><td>El comunicador pierde conexión.</td><td>—</td><td>SFX pérdida de señal</td><td>00:02:02</td><td><span class="time-pill">▶ 00:23</span></td></tr>
+                <tr data-seek="25.1"><td>2</td><td>10</td><td>Plano medio → Plano conjunto</td><td>Zoom out</td><td>La cámara parte de Masha escondida detrás de la pared y revela el pasillo y a los agentes de la OATT.</td><td>MASHA: «Espero que le diera tiempo a…»</td><td>—</td><td>00:02:01</td><td><span class="time-pill">▶ 00:25</span></td></tr>
+                <tr data-seek="27.1"><td>2</td><td>11</td><td>Plano conjunto</td><td>Estático</td><td>Se ve a Masha pegada a la pared y a los agentes de la OATT en el pasillo.</td><td>MASHA: «…avisar a los demás antes del corte de conexión.»</td><td>—</td><td>00:01:20</td><td><span class="time-pill">▶ 00:27</span></td></tr>
+                <tr data-seek="29"><td>2</td><td>12</td><td>Plano perfil / Contrapicado</td><td>Estático</td><td>Los agentes de la OATT corren a por Masha mientras ella huye.</td><td>AGENTE: «¡Está aquí, detenedla!» / MASHA: «¡Oh, no, me han detectado!»</td><td>—</td><td>00:03:12</td><td><span class="time-pill">▶ 00:29</span></td></tr>
+                <tr class="transition-row" data-seek="32.5"><td>—</td><td>—</td><td>CORTINILLA</td><td>—</td><td>Transición «Mientras tanto…» entre escenas.</td><td>NARRADOR: «Mientras tanto…»</td><td>Voz en off</td><td>00:03:09</td><td><span class="time-pill">▶ 00:32</span></td></tr>
+                <tr data-seek="35.8"><td>3</td><td>13</td><td>Plano entero</td><td>Estático</td><td>Zak sale de su oficina al pasillo en la oscuridad.</td><td>—</td><td>Pasos / Voz robotizada</td><td>00:01:18</td><td><span class="time-pill">▶ 00:36</span></td></tr>
+                <tr class="transition-row" data-seek="37.6"><td>—</td><td>—</td><td>EL FUNDIDO</td><td>—</td><td>Transición a negro entre escenas.</td><td>—</td><td>Transición</td><td>—</td><td><span class="time-pill">▶ 00:37</span></td></tr>
+                <tr data-seek="37.6"><td>4</td><td>14</td><td>Plano general / Sala de servidores</td><td>Zoom in</td><td>El sistema automatizado activa los protocolos de emergencia y la cámara se acerca a la pantalla central.</td><td>SISTEMA: «Activando sistema de emergencia,»</td><td>Voz robotizada</td><td>00:08:06</td><td><span class="time-pill">▶ 00:38</span></td></tr>
+                <tr data-seek="45.8"><td>4</td><td>15</td><td>Plano medio / Pantalla central</td><td>Zoom in</td><td>Analiza el edificio e identifica al infiltrado en el monitor (cuadro dentro del cuadro).</td><td>SISTEMA: «analizando espacio… Sujeto no identificado se encuentra en la planta 10.»</td><td>Voz robotizada</td><td>00:05:00</td><td><span class="time-pill">▶ 00:46</span></td></tr>
+                <tr data-seek="50.8"><td>4</td><td>16</td><td>Plano detalle / Pantalla CCTV (Picado)</td><td>Estático</td><td>En el monitor aparece Zak en el pasillo preparándose para encontrar al infiltrado.</td><td>ZAK: «Bueno, ya te tengo…»</td><td>—</td><td>00:03:04</td><td><span class="time-pill">▶ 00:51</span></td></tr>
+                <tr class="transition-row" data-seek="54"><td>—</td><td>—</td><td>Créditos finales</td><td>Scroll</td><td>Créditos de la animática.</td><td>—</td><td>Música</td><td>00:08:11</td><td><span class="time-pill">▶ 00:54</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- TAB 2: GUION LITERARIO -->
+        <section id="tabLiterario" class="doc-panel">
+          <div class="panel-header">
+            <div>
+              <h2>📜 Guion Literario</h2>
+              <p class="panel-hint">Formato estándar de guion cinematográfico.</p>
+            </div>
+            <a class="doc-dl-btn" href="docs/spy-mystery-caso-07/Guion_Literario.pdf" target="_blank" rel="noopener">⬇️ Abrir PDF original</a>
+          </div>
+
+          <div class="screenplay-sheet">
+            <div class="sp-title">SPY MYSTERY — CASO 07</div>
+            <div class="sp-author">Escrito por Zakhar Oleksenko Shapoval</div>
+
+            <div class="sp-scene">INT. OFICINA DE SPY CORPORATION – DÍA</div>
+            <p class="sp-action">ZAK está sentado en su oficina, mirando algunos documentos en su ordenador sobre los últimos casos resueltos y terminando de escribir el informe del caso 06. De repente, recibe un mensaje de alerta de MASHA, quien está encubierta en la OATT.</p>
+
+            <div class="sp-char">SISTEMA (OFF)</div>
+            <div class="sp-paren">(voz robotizada)</div>
+            <p class="sp-dial">Descifrado del mensaje en curso.</p>
+
+            <div class="sp-char">MASHA (V.O.)</div>
+            <div class="sp-paren">(en mensaje)</div>
+            <p class="sp-dial">Buenos días, acabo de encontrar un informe bastante preocupante; por tanto... (error de descifrado) Tx xzlznjwt zsf jafhzhnts ijq jinknhnt qf TFYY jxyf ijsywt.</p>
+
+            <div class="sp-char">ZAK</div>
+            <p class="sp-dial">Qué extraño, no debería dar error…</p>
+
+            <p class="sp-action">De repente, se va la luz en toda la oficina.</p>
+            <div class="sp-trans">FUNDIDO A NEGRO.</div>
+
+            <div class="sp-scene">INT. PASILLO DE LA OATT – DÍA</div>
+            <p class="sp-action">MASHA guarda el comunicador y se pega a la pared usando su habilidad de gimnasia.</p>
+
+            <div class="sp-char">MASHA</div>
+            <div class="sp-paren">(para sí misma)</div>
+            <p class="sp-dial">Espero que le diera tiempo a avisar a los demás antes del corte de conexión.</p>
+
+            <div class="sp-char">AGENTE DE LA OATT</div>
+            <p class="sp-dial">¡Está aquí, detenedla!</p>
+
+            <div class="sp-char">MASHA</div>
+            <p class="sp-dial">¡Oh, no, me han detectado!</p>
+            <div class="sp-trans">CORTINILLA A:</div>
+
+            <div class="sp-scene">INT. PASILLO DE SPY CORPORATION – TARDE</div>
+            <p class="sp-action">Zak sale de su oficina al pasillo y oye ruidos extraños en la oscuridad.</p>
+            <div class="sp-trans">FUNDIDO A NEGRO.</div>
+
+            <div class="sp-scene">INT. SALA DE SERVIDORES DE SPY CORPORATION – TARDE</div>
+            <p class="sp-action">El sistema inteligente del edificio activa automáticamente los protocolos de emergencia. En la pantalla central aparece el escaneo del edificio con la imagen de un infiltrado y, a continuación, la cámara de seguridad mostrando a Zak en el pasillo.</p>
+
+            <div class="sp-char">SISTEMA (OFF)</div>
+            <div class="sp-paren">(voz robotizada)</div>
+            <p class="sp-dial">Activando sistema de emergencia, analizando espacio… Sujeto no identificado se encuentra en la planta 10.</p>
+
+            <div class="sp-char">ZAK (EN PANTALLA)</div>
+            <p class="sp-dial">Bueno, ya te tengo…</p>
+          </div>
+        </section>
+
+        <!-- TAB 3: STORYBOARD -->
+        <section id="tabStoryboard" class="doc-panel">
+          <div class="panel-header">
+            <div>
+              <h2>🎨 Storyboard Completo</h2>
+              <p class="panel-hint">Viñetas ilustradas, encuadres, movimientos de cámara y notas de acción.</p>
+            </div>
+            <a class="doc-dl-btn" href="docs/spy-mystery-caso-07/Storyboard.pdf" target="_blank" rel="noopener">⬇️ Abrir / Descargar Storyboard PDF</a>
+          </div>
+          <iframe class="pdf-frame" src="docs/spy-mystery-caso-07/Storyboard.pdf#view=FitH" title="Storyboard SPY MYSTERY CASO 07"></iframe>
+        </section>
+
+        <!-- TAB 4: DOSSIER COMPLETO -->
+        <section id="tabDossier" class="doc-panel">
+          <div class="panel-header">
+            <div>
+              <h2>📁 Dossier de Producción Completo (PDF)</h2>
+              <p class="panel-hint">Documento unificado con guion literario, guion técnico y storyboard completo.</p>
+            </div>
+            <a class="doc-dl-btn" href="docs/spy-mystery-caso-07/Dossier_Completo.pdf" target="_blank" rel="noopener">⬇️ Abrir / Descargar Dossier PDF</a>
+          </div>
+          <iframe class="pdf-frame" src="docs/spy-mystery-caso-07/Dossier_Completo.pdf#view=FitH" title="Dossier Completo SPY MYSTERY CASO 07"></iframe>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <div class="FOOTER">
+      <p>Diseñado por Zakhar Oleksenko Shapoval</p>
+      <p class="email"><a href="mailto:pr.zakerii@gmail.com">pr.zakerii@gmail.com</a></p>
+    </div>
+
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Tab switching
+      const tabBtns = document.querySelectorAll('.doc-tab-btn');
+      const panels = document.querySelectorAll('.doc-panel');
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach(b => b.classList.remove('active'));
+          panels.forEach(p => p.classList.remove('active'));
+          btn.classList.add('active');
+          const target = document.getElementById(btn.dataset.tab);
+          if (target) target.classList.add('active');
+        });
+      });
+
+      // Seek video when clicking a row in Guion Técnico
+      const video = document.getElementById('animaticaPlayer');
+      document.querySelectorAll('.tech-table tbody tr[data-seek]').forEach(row => {
+        row.addEventListener('click', () => {
+          const sec = parseFloat(row.dataset.seek);
+          if (video && !isNaN(sec)) {
+            video.currentTime = sec;
+            video.play().catch(() => {});
+            video.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        });
+      });
+
+      // Copy microlink
+      const copyBtn = document.getElementById('copyMicroLinkBtn');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText('https://zakerii.com/caso07');
+            copyBtn.textContent = '✓ Copiado';
+            setTimeout(() => { copyBtn.textContent = 'Copiar'; }, 2000);
+          } catch {
+            copyBtn.textContent = 'zakerii.com/caso07';
+          }
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

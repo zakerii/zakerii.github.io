@@ -55,6 +55,8 @@ export async function onRequestPost(context) {
         category: body.category || 'anim video',
         fileName: body.fileName,
         mediaType: body.mediaType || '',
+        caseStudyUrl: body.caseStudyUrl || '',
+        caseStudyLabel: body.caseStudyLabel || '',
         tags: body.tags || '',
         desc: body.desc || '',
         visible: true,
@@ -87,6 +89,8 @@ export async function onRequestPost(context) {
             desc: body.desc !== undefined ? body.desc : w.desc,
             fileName: body.fileName ? body.fileName : w.fileName,
             mediaType: body.mediaType !== undefined ? body.mediaType : w.mediaType,
+            caseStudyUrl: body.caseStudyUrl !== undefined ? body.caseStudyUrl : w.caseStudyUrl,
+            caseStudyLabel: body.caseStudyLabel !== undefined ? body.caseStudyLabel : w.caseStudyLabel,
             visible: body.visible !== undefined ? body.visible : w.visible,
             featuredInCarousel: body.featuredInCarousel !== undefined ? body.featuredInCarousel : w.featuredInCarousel,
             updatedAt: new Date().toISOString()
