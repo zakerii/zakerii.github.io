@@ -1,6 +1,16 @@
 // functions/api/upload.js
 export async function onRequestPost(context) {
   try {
+    const authHeader = context.request.headers.get('Authorization') || '';
+    const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
+    const authedUser = token ? await context.env.ZAKERII_DATA.get(`session:${token}`) : null;
+    if (!authedUser) {
+      return new Response(JSON.stringify({ error: 'Unauthorized: admin session required' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
     const contentType = context.request.headers.get('content-type') || '';
     
     // Check if multipart form data

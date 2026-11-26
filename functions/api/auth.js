@@ -26,12 +26,23 @@ export async function onRequestPost(context) {
     const { action } = body;
 
     if (action === 'login') {
+      const clientIp = context.request.headers.get('CF-Connecting-IP') || 'unknown';
+      const rateKey = `login_fail:${clientIp}`;
+      const fails = Number((await context.env.ZAKERII_DATA.get(rateKey)) || '0');
+      if (fails >= 8) {
+        return new Response(JSON.stringify({ success: false, error: 'Слишком много попыток входа. Повторите через 15 минут.' }), {
+          status: 429,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+
       const username = (body.username || '').trim().toLowerCase();
       const password = body.password || '';
       const creds = await getStoredCredentials(context.env);
       const inputHash = await sha256(password);
 
       if (username === creds.username.toLowerCase() && inputHash === creds.passwordHash) {
+        if (fails > 0) await context.env.ZAKERII_DATA.delete(rateKey);
         const token = crypto.randomUUID();
         await context.env.ZAKERII_DATA.put(`session:${token}`, creds.username, { expirationTtl: 86400 });
         return new Response(JSON.stringify({ success: true, token }), {
@@ -39,6 +50,7 @@ export async function onRequestPost(context) {
         });
       }
 
+      await context.env.ZAKERII_DATA.put(rateKey, String(fails + 1), { expirationTtl: 900 });
       return new Response(JSON.stringify({ success: false, error: 'Неверный логин или пароль' }), {
         status: 401,
         headers: { 'Content-Type': 'application/json' }

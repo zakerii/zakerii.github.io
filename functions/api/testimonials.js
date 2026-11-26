@@ -1,11 +1,21 @@
 // functions/api/testimonials.js
+async function verifyAdmin(context, bodyToken = '') {
+  const authHeader = context.request.headers.get('Authorization') || '';
+  const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
+  const token = bearer || bodyToken || '';
+  if (!token) return false;
+  const user = await context.env.ZAKERII_DATA.get(`session:${token}`);
+  return Boolean(user);
+}
+
 export async function onRequestGet(context) {
   try {
     const url = new URL(context.request.url);
     const isPublic = url.searchParams.get('public') === 'true';
+    const isAdmin = !isPublic && (await verifyAdmin(context));
     let data = (await context.env.ZAKERII_DATA.get('testimonials', 'json')) || [];
 
-    if (isPublic) {
+    if (isPublic || !isAdmin) {
       data = data.filter(t => t.status === 'approved');
     }
 
@@ -27,27 +37,32 @@ export async function onRequestPost(context) {
     let list = (await context.env.ZAKERII_DATA.get('testimonials', 'json')) || [];
 
     if (action === 'submit') {
-      // Incoming from public client
+      // Incoming from public client (with length limits)
       const newReview = {
         id: 'rev_' + Date.now(),
-        author: body.author || 'Cliente anónimo',
-        project: body.project || 'Servicio creativo',
-        platform: body.platform || 'Web',
-        rating: Number(body.rating) || 5,
-        text: body.text || '',
+        author: String(body.author || 'Cliente anónimo').slice(0, 80),
+        project: String(body.project || 'Servicio creativo').slice(0, 120),
+        platform: String(body.platform || 'Web').slice(0, 40),
+        rating: Math.max(1, Math.min(5, Number(body.rating) || 5)),
+        text: String(body.text || '').slice(0, 1000),
         status: 'pending', // Requires admin approval!
         date: new Date().toLocaleDateString()
       };
       list.unshift(newReview);
-    } else if (action === 'approve') {
-      list = list.map(t => {
-        if (t.id === body.id) {
-          return { ...t, status: 'approved' };
-        }
-        return t;
-      });
-    } else if (action === 'reject' || action === 'delete') {
-      list = list.filter(t => t.id !== body.id);
+    } else if (action === 'approve' || action === 'reject' || action === 'delete') {
+      if (!(await verifyAdmin(context, body.token))) {
+        return new Response(JSON.stringify({ success: false, error: 'Unauthorized: admin session required' }), {
+          status: 401,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+      if (action === 'approve') {
+        list = list.map(t => (t.id === body.id ? { ...t, status: 'approved' } : t));
+      } else {
+        list = list.filter(t => t.id !== body.id);
+      }
+    } else {
+      return new Response(JSON.stringify({ error: 'Unknown action' }), { status: 400 });
     }
 
     await context.env.ZAKERII_DATA.put('testimonials', JSON.stringify(list));

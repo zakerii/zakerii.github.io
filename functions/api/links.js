@@ -16,6 +16,17 @@ export async function onRequestGet(context) {
 export async function onRequestPost(context) {
   try {
     const body = await context.request.json();
+    const authHeader = context.request.headers.get('Authorization') || '';
+    const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
+    const token = bearer || (body && body.token) || '';
+    const authedUser = token ? await context.env.ZAKERII_DATA.get(`session:${token}`) : null;
+    if (!authedUser) {
+      return new Response(JSON.stringify({ success: false, error: 'Unauthorized: admin session required' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
     const links = Array.isArray(body) ? body : (body.links || []);
     await context.env.ZAKERII_DATA.put('links', JSON.stringify(links));
 

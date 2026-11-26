@@ -1277,6 +1277,23 @@
   <!-- ===== SCRIPT ===== -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // 0. Automatically attach admin Bearer token to all /api/* requests
+      const _origFetch = window.fetch.bind(window);
+      window.fetch = (input, init = {}) => {
+        const url = typeof input === 'string' ? input : (input && input.url) || '';
+        if (url.startsWith('/api/')) {
+          const token = sessionStorage.getItem('zakerii_session_token');
+          if (token) {
+            const headers = new Headers(init.headers || {});
+            if (!headers.has('Authorization')) {
+              headers.set('Authorization', 'Bearer ' + token);
+            }
+            init = { ...init, headers };
+          }
+        }
+        return _origFetch(input, init);
+      };
+
       // 1. Server-side Authentication via /api/auth (Cloudflare KV)
       const authOverlay = document.getElementById('authOverlay');
       const loginForm = document.getElementById('loginForm');
@@ -1930,7 +1947,63 @@
       // 6. KANBAN TRACKER
       const COL_IDS = ['new', 'estimate', 'progress', 'drive', 'done'];
       function getKanbanTasks() {
-        return JSON.parse(localStorage.getItem('zakerii_kanban') || '[]');
+        let tasks = JSON.parse(localStorage.getItem('zakerii_kanban') || '[]');
+        if (!localStorage.getItem('zakerii_roadmap_v1')) {
+          const roadmapDefaults = [
+            {
+              id: 'rm_showreel',
+              title: '🎬 Собрать Showreel Монтажёра (45–60 сек)',
+              client: 'Портфолио • Главная',
+              price: '',
+              status: 'new',
+              desc: 'Динамичная нарезка лучших монтажей (YouTube/Shorts, Animática, After Effects, Blender) на первый экран home.html.'
+            },
+            {
+              id: 'rm_drafts',
+              title: '👁️ Проверить 5 загруженных черновиков в Портфолио',
+              client: 'Диск F: • Скрытые работы',
+              price: '',
+              status: 'new',
+              desc: 'Montaje WalkCycle ACT 16, After Effects Loop ACT 9, Iluminación 3D, Escenario Isométrico, Render Limón — включить нужные.'
+            },
+            {
+              id: 'rm_gdrive',
+              title: '📹 Выбрать 2–3 лучших монтажа с Google Drive / YouTube',
+              client: 'Монтажёр • Кейсы',
+              price: '',
+              status: 'new',
+              desc: 'Добавить на сайт Shorts/Long-формат (GTA6 / Ubisoft / DaVinci Resolve) с припиской: монтаж, звук, графика, retention.'
+            },
+            {
+              id: 'rm_ai_block',
+              title: '🤖 Добавить блок «AI-Assisted Post-Production» в About & Home',
+              client: 'Позиционирование',
+              price: '',
+              status: 'new',
+              desc: 'Позиционировать ИИ как ускоритель монтажа (ElevenLabs, сценарии, сабы, VFX/превью), а не «делаю всё кнопкой».'
+            },
+            {
+              id: 'rm_walkcycle_case',
+              title: '🚶 Сделать Case Study /walkcycle (Этапы: Boceto → Line → Color → Final)',
+              client: 'Портфолио • F:\\AE\\T4',
+              price: '',
+              status: 'estimate',
+              desc: 'Показать весь пайплайн анимации по аналогии с zakerii.com/caso07.'
+            },
+            {
+              id: 'rm_pass',
+              title: '🔒 Сменить пароль админки в разделе «Безопасность»',
+              client: 'Защита сайта',
+              price: '',
+              status: 'progress',
+              desc: 'API теперь закрыт токенами и rate-limit; остаётся убедиться, что стоит личный сложный пароль.'
+            }
+          ];
+          tasks = [...roadmapDefaults, ...tasks];
+          localStorage.setItem('zakerii_kanban', JSON.stringify(tasks));
+          localStorage.setItem('zakerii_roadmap_v1', '1');
+        }
+        return tasks;
       }
       function saveKanbanTasks(tasks) {
         localStorage.setItem('zakerii_kanban', JSON.stringify(tasks));

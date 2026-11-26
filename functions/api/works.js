@@ -40,9 +40,25 @@ export async function onRequestGet(context) {
   }
 }
 
+async function verifyAdmin(context, bodyToken = '') {
+  const authHeader = context.request.headers.get('Authorization') || '';
+  const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
+  const token = bearer || bodyToken || '';
+  if (!token) return false;
+  const user = await context.env.ZAKERII_DATA.get(`session:${token}`);
+  return Boolean(user);
+}
+
 export async function onRequestPost(context) {
   try {
     const body = await context.request.json();
+    if (!(await verifyAdmin(context, body.token))) {
+      return new Response(JSON.stringify({ success: false, error: 'Unauthorized: admin session required' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
     const action = body.action || 'save_all';
     let works = (await context.env.ZAKERII_DATA.get('works', 'json')) || [];
 
@@ -59,7 +75,7 @@ export async function onRequestPost(context) {
         caseStudyLabel: body.caseStudyLabel || '',
         tags: body.tags || '',
         desc: body.desc || '',
-        visible: true,
+        visible: body.visible !== undefined ? body.visible : true,
         featuredInCarousel: body.featuredInCarousel ?? true,
         createdAt: new Date().toISOString()
       };
